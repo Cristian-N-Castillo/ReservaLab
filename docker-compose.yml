@@ -1,0 +1,71 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: reserva_php
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - reserva_network
+
+  postgres:
+    image: postgres:17
+    container_name: reserva_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - reserva_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: reserva_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - reserva_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: reserva_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - reserva_network
+
+networks:
+  reserva_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  pgadmin_data:

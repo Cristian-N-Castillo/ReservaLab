@@ -1,0 +1,23 @@
+# Variables de entorno
+.env
+
+# Composer
+/src/vendor
+
+# Logs
+/src/storage/logs/*
+!/src/storage/logs/.gitkeep
+
+# Cache
+/src/storage/cache/*
+!/src/storage/cache/.gitkeep
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/settings.json
+
+# Docker
+docker-data/
