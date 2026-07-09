@@ -13,7 +13,6 @@ return array(
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Database\\' => array($baseDir . '/src/database'),
-    'Core\\' => array($baseDir . '/src/core'),
-    'Config\\' => array($baseDir . '/src/config'),
-    'App\\' => array($baseDir . '/src/app'),
+    'Core\\' => array($baseDir . '/src/Core'),
+    'App\\' => array($baseDir . '/src/App'),
 );

@@ -35,7 +35,6 @@ class ComposerStaticInit6e21414d5466d324d8ce41f209cd4b72
         'C' =>
         array (
             'Core\\' => 5,
-            'Config\\' => 7,
         ),
         'A' =>
         array (
@@ -74,21 +73,19 @@ class ComposerStaticInit6e21414d5466d324d8ce41f209cd4b72
         ),
         'Core\\' =>
         array (
-            0 => __DIR__ . '/../..' . '/src/core',
-        ),
-        'Config\\' =>
-        array (
-            0 => __DIR__ . '/../..' . '/src/config',
+            0 => __DIR__ . '/../..' . '/src/Core',
         ),
         'App\\' =>
         array (
-            0 => __DIR__ . '/../..' . '/src/app',
+            0 => __DIR__ . '/../..' . '/src/App',
         ),
     );
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Core\\Application' => __DIR__ . '/../..' . '/src/Core/Application.php',
+        'Core\\Config' => __DIR__ . '/../..' . '/src/Core/Config.php',
         'Dotenv\\Dotenv' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Dotenv.php',
         'Dotenv\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/ExceptionInterface.php',
         'Dotenv\\Exception\\InvalidEncodingException' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/InvalidEncodingException.php',
