@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Core\Config;
+use Core\Database;
+
+Config::load(__DIR__);
+
+$command = $argv[1] ?? null;
+
+switch ($command) {
+
+    case 'create:admin':
+        require __DIR__ . '/src/console/create_admin.php';
+        break;
+
+    default:
+        echo PHP_EOL;
+        echo "ReservaLab Console\n";
+        echo "==================\n\n";
+        echo "Comandos disponibles:\n\n";
+        echo "  php console create:admin\n\n";
+        break;
+}

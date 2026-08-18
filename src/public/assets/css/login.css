@@ -1,0 +1,137 @@
+body{
+
+    background:linear-gradient(135deg,#0d6efd,#5ca9ff);
+
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+
+}
+
+.login-card{
+
+    border-radius:22px;
+
+}
+
+.login-left{
+
+    background:linear-gradient(160deg,#0d6efd,#0056d6);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px;
+
+}
+
+.login-form{
+
+    padding:60px;
+
+    background:white;
+
+}
+
+.login-avatar{
+
+    font-size:80px;
+
+    color:#0d6efd;
+
+}
+
+.input-group-text{
+
+    background:#f8f9fa;
+
+    border-right:none;
+
+}
+
+.form-control{
+
+    border-left:none;
+
+    padding:12px;
+
+}
+
+.form-control:focus{
+
+    box-shadow:none;
+
+    border-color:#86b7fe;
+
+}
+
+.input-group:focus-within{
+
+    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+
+    border-radius:.5rem;
+
+}
+
+.btn-primary{
+
+    padding:14px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-2px);
+
+}
+
+@media(max-width:991px){
+
+    .login-form{
+
+        padding:40px;
+
+    }
+
+}
+
+/* ==========================================
+   Ajustes: tamaños algo más compactos y
+   mejor comportamiento en pantallas chicas
+   ========================================== */
+
+body {
+    font-size: .92rem;
+}
+
+.login-left h1 {
+    font-size: 1.9rem;
+}
+
+.login-avatar {
+    font-size: 64px;
+}
+
+@media (max-width: 575px) {
+
+    .login-card {
+        border-radius: 14px;
+    }
+
+    .login-form {
+        padding: 28px 22px;
+    }
+
+    .login-avatar {
+        font-size: 52px;
+    }
+}

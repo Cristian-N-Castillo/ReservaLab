@@ -12,6 +12,11 @@
 /src/storage/cache/*
 !/src/storage/cache/.gitkeep
 
+# Archivos subidos por usuarios (PDF de observaciones)
+/src/storage/uploads/**/*
+!/src/storage/uploads/.gitkeep
+!/src/storage/uploads/**/.gitkeep
+
 # Archivos del sistema
 .DS_Store
 Thumbs.db

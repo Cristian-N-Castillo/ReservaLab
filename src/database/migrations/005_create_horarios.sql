@@ -1,0 +1,16 @@
+CREATE TABLE horarios
+(
+    id_horario SERIAL PRIMARY KEY,
+
+    nombre VARCHAR(50) NOT NULL,
+
+    hora_inicio TIME NOT NULL,
+
+    hora_fin TIME NOT NULL,
+
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

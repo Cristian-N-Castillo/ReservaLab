@@ -1,0 +1,3 @@
+ALTER TABLE usuarios ADD COLUMN reset_codigo VARCHAR(64) NULL;
+ALTER TABLE usuarios ADD COLUMN reset_codigo_expira TIMESTAMP NULL;
+ALTER TABLE usuarios ADD COLUMN reset_intentos SMALLINT NOT NULL DEFAULT 0;
