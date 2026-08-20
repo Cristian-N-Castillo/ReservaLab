@@ -413,14 +413,6 @@ span.calendario-evento {
     color: #212529 !important;
 }
 
-.evento-cancelada {
-    background-color: #dc3545;
-}
-
-.evento-encurso {
-    background-color: #6c757d;
-}
-
 .calendario-leyenda {
     display: inline-flex;
     align-items: center;

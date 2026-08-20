@@ -8,7 +8,6 @@ use Core\Session;
  * @var array $semanas
  * @var \DateTimeImmutable $nombreMes
  * @var string $hoy
- * @var string $horaActual
  * @var int $anioAnterior
  * @var int $mesAnterior
  * @var int $anioSiguiente
@@ -27,34 +26,16 @@ $meses = [
 ];
 
 /**
- * Determina la clase de color según el estado real de la reserva
- * y, si está Confirmada y es justo hoy, si el bloque horario está
- * ocurriendo ahora mismo (se pinta en gris en vez de verde).
+ * Determina la clase de color según el estado de la reserva.
+ * El calendario solo recibe reservas Pendientes o Confirmadas
+ * (ReservaService::porRangoFechas ya descarta el resto).
  */
-function claseEventoCalendario(array $reserva, string $hoy, string $horaActual): string
+function claseEventoCalendario(array $reserva): string
 {
     $estado = mb_strtolower((string) $reserva['estado']);
 
-    if ($estado === 'cancelada') {
-        return 'evento-cancelada';
-    }
-
     if ($estado === 'pendiente') {
         return 'evento-pendiente';
-    }
-
-    if ($estado === 'finalizada') {
-        return 'evento-encurso';
-    }
-
-    if ((string) $reserva['fecha'] === $hoy) {
-
-        $horaInicio = substr((string) $reserva['hora_inicio'], 0, 5);
-        $horaFin = substr((string) $reserva['hora_fin'], 0, 5);
-
-        if ($horaActual >= $horaInicio && $horaActual <= $horaFin) {
-            return 'evento-encurso';
-        }
     }
 
     return 'evento-confirmada';
@@ -163,7 +144,7 @@ function claseEventoCalendario(array $reserva, string $hoy, string $horaActual):
                                         . ' ' . htmlspecialchars((string) $reserva['laboratorio']);
 
                                     $claseEvento = 'calendario-evento '
-                                        . claseEventoCalendario($reserva, $hoy, $horaActual);
+                                        . claseEventoCalendario($reserva);
 
                                     ?>
 
@@ -224,16 +205,6 @@ function claseEventoCalendario(array $reserva, string $hoy, string $horaActual):
         <span class="calendario-leyenda">
             <span class="calendario-punto evento-pendiente"></span>
             Pendiente
-        </span>
-
-        <span class="calendario-leyenda">
-            <span class="calendario-punto evento-cancelada"></span>
-            Cancelada
-        </span>
-
-        <span class="calendario-leyenda">
-            <span class="calendario-punto evento-encurso"></span>
-            En curso / Finalizada
         </span>
 
     </div>

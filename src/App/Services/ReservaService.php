@@ -79,12 +79,22 @@ final class ReservaService
     }
 
     /**
-     * Reservas dentro de un rango de fechas (incluye canceladas),
-     * para pintar el calendario mensual.
+     * Reservas Pendientes y Confirmadas dentro de un rango de
+     * fechas, para pintar el calendario mensual. Las canceladas
+     * (y cualquier otro estado) no se muestran ahí.
      */
     public function porRangoFechas(string $desde, string $hasta): array
     {
-        return $this->repository->historial($desde, $hasta);
+        $reservas = $this->repository->historial($desde, $hasta);
+
+        return array_values(array_filter(
+            $reservas,
+            static fn (array $r): bool => in_array(
+                mb_strtolower((string) $r['estado']),
+                ['pendiente', 'confirmada'],
+                true
+            )
+        ));
     }
 
     /**

@@ -168,7 +168,6 @@ final class ReservaController extends Controller
         }
 
         $hoy = (new \DateTimeImmutable('today'))->format('Y-m-d');
-        $horaActual = (new \DateTimeImmutable('now'))->format('H:i');
 
         $semanas = [];
         $cursor = $inicioGrilla;
@@ -205,7 +204,6 @@ final class ReservaController extends Controller
                 'semanas' => $semanas,
                 'nombreMes' => $primerDiaMes,
                 'hoy' => $hoy,
-                'horaActual' => $horaActual,
                 'anioAnterior' => (int) $mesAnterior->format('Y'),
                 'mesAnterior' => (int) $mesAnterior->format('n'),
                 'anioSiguiente' => (int) $mesSiguiente->format('Y'),
