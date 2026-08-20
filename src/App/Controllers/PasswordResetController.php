@@ -9,8 +9,6 @@ use Core\Controller;
 use Core\Request;
 use Core\Response;
 use Core\Session;
-use InvalidArgumentException;
-use RuntimeException;
 
 final class PasswordResetController extends Controller
 {
@@ -84,32 +82,21 @@ final class PasswordResetController extends Controller
             $this->response->redirect('/recuperar-password');
         }
 
-        try {
+        $this->ejecutarConFlash(
+            function () use ($identificador, $codigo, $nueva, $confirmacion): void {
 
-            $this->service->restablecerPasswordConCodigo(
-                $identificador,
-                $codigo,
-                $nueva,
-                $confirmacion
-            );
+                $this->service->restablecerPasswordConCodigo(
+                    $identificador,
+                    $codigo,
+                    $nueva,
+                    $confirmacion
+                );
 
-            Session::remove('reset_identificador');
-
-            Session::flash(
-                'success',
-                'Tu contraseña fue restablecida correctamente. Ya puedes iniciar sesión.'
-            );
-
-            $this->response->redirect('/');
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $this->response->redirect('/recuperar-password/verificar');
-        }
+                Session::remove('reset_identificador');
+            },
+            'Tu contraseña fue restablecida correctamente. Ya puedes iniciar sesión.',
+            '/',
+            '/recuperar-password/verificar'
+        );
     }
 }

@@ -8,20 +8,16 @@ use App\Models\Usuario;
 use App\Services\UsuarioService;
 use Core\Controller;
 use Core\Request;
-use Core\Response;
 use Core\Session;
-use InvalidArgumentException;
 use RuntimeException;
 
 final class PerfilController extends Controller
 {
     private UsuarioService $service;
-    private Response $response;
 
     public function __construct()
     {
         $this->service = new UsuarioService();
-        $this->response = new Response();
     }
 
     public function index(): string
@@ -68,34 +64,22 @@ final class PerfilController extends Controller
 
         $avatar = (string) $request->input('avatar', '');
 
-        try {
+        $this->ejecutarConFlash(
+            function () use ($usuario, $idUsuario, $avatar): void {
 
-            $this->service->actualizar($usuario);
+                $this->service->actualizar($usuario);
 
-            $this->service->actualizarAvatar($idUsuario, $avatar);
+                $this->service->actualizarAvatar($idUsuario, $avatar);
 
-            Session::set(
-                'nombre',
-                trim($usuario->nombres . ' ' . $usuario->apellidos)
-            );
+                Session::set(
+                    'nombre',
+                    trim($usuario->nombres . ' ' . $usuario->apellidos)
+                );
 
-            Session::set('avatar', $avatar);
-
-            Session::flash(
-                'success',
-                'Su perfil fue actualizado correctamente.'
-            );
-
-            $this->response->redirect('/perfil');
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $this->response->redirect('/perfil');
-        }
+                Session::set('avatar', $avatar);
+            },
+            'Su perfil fue actualizado correctamente.',
+            '/perfil'
+        );
     }
 }

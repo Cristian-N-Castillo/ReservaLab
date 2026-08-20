@@ -9,7 +9,6 @@ use Core\Controller;
 use Core\Request;
 use Core\Response;
 use Core\Session;
-use InvalidArgumentException;
 
 final class LaboratorioController extends Controller
 {
@@ -63,9 +62,8 @@ final class LaboratorioController extends Controller
      */
     public function store(Request $request): void
     {
-        try {
-
-            $this->service->crear(
+        $this->ejecutarConFlash(
+            fn () => $this->service->crear(
                 nombre: (string) $request->input('nombre', ''),
                 ubicacion: (string) $request->input('ubicacion', ''),
                 descripcion: (string) $request->input('descripcion', ''),
@@ -73,24 +71,11 @@ final class LaboratorioController extends Controller
                 especialidadPrioritaria: $request->input('especialidad_prioritaria') !== null
                     ? (string) $request->input('especialidad_prioritaria')
                     : null
-            );
-
-            Session::flash(
-                'success',
-                'Laboratorio creado correctamente.'
-            );
-
-            $this->response->redirect('/laboratorios');
-
-        } catch (InvalidArgumentException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $this->response->redirect('/laboratorios/crear');
-        }
+            ),
+            'Laboratorio creado correctamente.',
+            '/laboratorios',
+            '/laboratorios/crear'
+        );
     }
 
     /**
@@ -123,9 +108,8 @@ final class LaboratorioController extends Controller
      */
     public function update(int $id, Request $request): void
     {
-        try {
-
-            $this->service->actualizar(
+        $this->ejecutarConFlash(
+            fn () => $this->service->actualizar(
                 id: $id,
                 nombre: (string) $request->input('nombre', ''),
                 ubicacion: (string) $request->input('ubicacion', ''),
@@ -135,24 +119,11 @@ final class LaboratorioController extends Controller
                     ? (string) $request->input('especialidad_prioritaria')
                     : null,
                 activo: $request->input('activo') !== null
-            );
-
-            Session::flash(
-                'success',
-                'Laboratorio actualizado correctamente.'
-            );
-
-            $this->response->redirect('/laboratorios');
-
-        } catch (InvalidArgumentException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $this->response->redirect("/laboratorios/{$id}/editar");
-        }
+            ),
+            'Laboratorio actualizado correctamente.',
+            '/laboratorios',
+            "/laboratorios/{$id}/editar"
+        );
     }
 
     /**
@@ -173,23 +144,10 @@ final class LaboratorioController extends Controller
 
     private function cambiarEstado(int $id, bool $activo, string $accion): void
     {
-        try {
-
-            $this->service->cambiarEstado($id, $activo);
-
-            Session::flash(
-                'success',
-                "Laboratorio {$accion} correctamente."
-            );
-
-        } catch (InvalidArgumentException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-        }
-
-        $this->response->redirect('/laboratorios');
+        $this->ejecutarConFlash(
+            fn () => $this->service->cambiarEstado($id, $activo),
+            "Laboratorio {$accion} correctamente.",
+            '/laboratorios'
+        );
     }
 }

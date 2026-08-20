@@ -7,10 +7,7 @@ namespace App\Controllers;
 use App\Services\UsuarioService;
 use Core\Controller;
 use Core\Request;
-use Core\Response;
 use Core\Session;
-use InvalidArgumentException;
-use RuntimeException;
 
 final class PasswordController extends Controller
 {
@@ -36,39 +33,26 @@ final class PasswordController extends Controller
 
     public function update(Request $request): void
     {
-        $response = new Response();
-
         $idUsuario = (int) Session::get('usuario_id', 0);
 
         $nueva = (string) $request->input('password', '');
         $confirmacion = (string) $request->input('password_confirm', '');
         $avatar = (string) $request->input('avatar', '');
 
-        try {
+        $this->ejecutarConFlash(
+            function () use ($idUsuario, $nueva, $confirmacion, $avatar): void {
 
-            $this->service->cambiarPassword($idUsuario, $nueva, $confirmacion);
+                $this->service->cambiarPassword($idUsuario, $nueva, $confirmacion);
 
-            $this->service->actualizarAvatar($idUsuario, $avatar);
+                $this->service->actualizarAvatar($idUsuario, $avatar);
 
-            Session::set('debe_cambiar_password', false);
+                Session::set('debe_cambiar_password', false);
 
-            Session::set('avatar', $avatar);
-
-            Session::flash(
-                'success',
-                'Su contraseña fue actualizada correctamente.'
-            );
-
-            $response->redirect('/dashboard');
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $response->redirect('/cambiar-password');
-        }
+                Session::set('avatar', $avatar);
+            },
+            'Su contraseña fue actualizada correctamente.',
+            '/dashboard',
+            '/cambiar-password'
+        );
     }
 }

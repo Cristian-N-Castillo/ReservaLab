@@ -11,8 +11,6 @@ use Core\Controller;
 use Core\Request;
 use Core\Response;
 use Core\Session;
-use InvalidArgumentException;
-use RuntimeException;
 
 final class UsuarioController extends Controller
 {
@@ -76,26 +74,12 @@ final class UsuarioController extends Controller
             activo: true
         );
 
-        try {
-
-            $this->service->crear($usuario);
-
-            Session::flash(
-                'success',
-                'Usuario creado correctamente.'
-            );
-
-            $this->response->redirect('/usuarios');
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $this->response->redirect('/usuarios/crear');
-        }
+        $this->ejecutarConFlash(
+            fn () => $this->service->crear($usuario),
+            'Usuario creado correctamente.',
+            '/usuarios',
+            '/usuarios/crear'
+        );
     }
 
     public function show(int $id): string
@@ -134,47 +118,20 @@ final class UsuarioController extends Controller
             activo: true
         );
 
-        try {
-
-            $this->service->actualizar($usuario);
-
-            Session::flash(
-                'success',
-                'Usuario actualizado correctamente.'
-            );
-
-            $this->response->redirect('/usuarios');
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-
-            $this->response->redirect("/usuarios/{$id}/editar");
-        }
+        $this->ejecutarConFlash(
+            fn () => $this->service->actualizar($usuario),
+            'Usuario actualizado correctamente.',
+            '/usuarios',
+            "/usuarios/{$id}/editar"
+        );
     }
 
     public function destroy(int $id): void
     {
-        try {
-
-            $this->service->eliminar($id);
-
-            Session::flash(
-                'success',
-                'Usuario eliminado correctamente.'
-            );
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-        }
-
-        $this->response->redirect('/usuarios');
+        $this->ejecutarConFlash(
+            fn () => $this->service->eliminar($id),
+            'Usuario eliminado correctamente.',
+            '/usuarios'
+        );
     }
 }

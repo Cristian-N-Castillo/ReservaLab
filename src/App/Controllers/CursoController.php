@@ -7,8 +7,6 @@ namespace App\Controllers;
 use App\Services\CursoService;
 use Core\Controller;
 use Core\Request;
-use Core\Response;
-use InvalidArgumentException;
 
 final class CursoController extends Controller
 {
@@ -51,22 +49,13 @@ final class CursoController extends Controller
      */
     public function store(): void
     {
-        $request = new Request();
-        $response = new Response();
+        $nombre = trim((string) (new Request())->input('nombre'));
 
-        $nombre = trim((string) $request->input('nombre'));
-
-        try {
-
-            $this->service->crear($nombre);
-
-            // Más adelante reemplazaremos esto por un mensaje Flash.
-            $response->redirect('/cursos');
-
-        } catch (InvalidArgumentException $e) {
-
-            // Más adelante aquí mostraremos el mensaje Flash.
-            $response->redirect('/cursos/create');
-        }
+        $this->ejecutarConFlash(
+            fn () => $this->service->crear($nombre),
+            'Curso creado correctamente.',
+            '/cursos',
+            '/cursos/create'
+        );
     }
 }

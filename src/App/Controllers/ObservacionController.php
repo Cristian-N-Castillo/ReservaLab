@@ -10,8 +10,6 @@ use Core\Controller;
 use Core\Request;
 use Core\Response;
 use Core\Session;
-use InvalidArgumentException;
-use RuntimeException;
 
 final class ObservacionController extends Controller
 {
@@ -87,31 +85,18 @@ final class ObservacionController extends Controller
      */
     public function store(int $idReserva, Request $request): void
     {
-        try {
+        $idUsuarioAdmin = (int) Session::get('usuario_id', 0);
 
-            $idUsuarioAdmin = (int) Session::get('usuario_id', 0);
-
-            $this->service->crear(
+        $this->ejecutarConFlash(
+            fn () => $this->service->crear(
                 idReserva: $idReserva,
                 idUsuarioAdmin: $idUsuarioAdmin,
                 texto: (string) $request->input('observacion', ''),
                 archivo: $request->file('archivo_pdf')
-            );
-
-            Session::flash(
-                'success',
-                'Observación registrada correctamente.'
-            );
-
-        } catch (InvalidArgumentException|RuntimeException $e) {
-
-            Session::flash(
-                'error',
-                $e->getMessage()
-            );
-        }
-
-        $this->response->redirect("/reservas/{$idReserva}/observaciones");
+            ),
+            'Observación registrada correctamente.',
+            "/reservas/{$idReserva}/observaciones"
+        );
     }
 
     /**
