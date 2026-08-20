@@ -47,6 +47,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
      * =========================================================
+     * SELECTOR DE FECHA (FLATPICKR)
+     * =========================================================
+     *
+     * Reemplaza el <input type="date"> nativo para poder mostrar
+     * sábado y domingo deshabilitados (en gris) directamente en
+     * el calendario, igual que las fechas pasadas.
+     */
+
+    const MAX_DIAS_ANTICIPACION = 21;
+
+    if (typeof flatpickr !== 'undefined') {
+
+        flatpickr(inputFecha, {
+            locale: 'es',
+            dateFormat: 'Y-m-d',
+            altInput: true,
+            altFormat: 'd/m/Y',
+            minDate: 'today',
+            maxDate: new Date().fp_incr(MAX_DIAS_ANTICIPACION),
+            disable: [
+                (fecha) => fecha.getDay() === 0 || fecha.getDay() === 6
+            ],
+        });
+
+    }
+
+
+    /*
+     * =========================================================
      * ACTUALIZAR AGENDA
      * =========================================================
      *

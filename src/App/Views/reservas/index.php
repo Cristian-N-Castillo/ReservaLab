@@ -146,18 +146,17 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
                             </label>
 
                             <input
-                                type="date"
+                                type="text"
                                 name="fecha"
                                 id="fecha"
                                 class="form-control"
                                 value="<?= htmlspecialchars($fecha) ?>"
-                                min="<?= date('Y-m-d') ?>"
-                                max="<?= date('Y-m-d', strtotime('+21 days')) ?>"
+                                autocomplete="off"
                                 required>
 
                             <div class="form-text">
 
-                                Seleccione la fecha en que utilizará el laboratorio. No se aceptan reservas los días sábado ni domingo.
+                                Seleccione la fecha en que utilizará el laboratorio. Los días sábado y domingo aparecen deshabilitados.
 
                             </div>
 
@@ -913,6 +912,13 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
 </div>
 
+
+<!-- Selector de fecha (Flatpickr): permite deshabilitar sábado y domingo
+     visualmente en el calendario, algo que el <input type="date"> nativo
+     del navegador no admite. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js"></script>
 
 <!-- JavaScript específico del módulo Reservas -->
 <script src="/assets/js/reservas.js"></script>
