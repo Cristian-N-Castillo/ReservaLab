@@ -934,4 +934,4 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 </style>
 
 <!-- JavaScript específico del módulo Reservas -->
-<script src="/assets/js/reservas.js"></script>
+<script src="<?= \Core\Asset::url('/assets/js/reservas.js') ?>"></script>

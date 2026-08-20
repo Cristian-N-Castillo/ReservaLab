@@ -23,10 +23,10 @@ declare(strict_types=1);
         rel="stylesheet">
 
     <link
-        href="/assets/css/app.css"
+        href="<?= \Core\Asset::url('/assets/css/app.css') ?>"
         rel="stylesheet">
-    <link href="/assets/css/dashboard.css" rel="stylesheet">
-    <link href="/assets/css/avatar.css" rel="stylesheet">
+    <link href="<?= \Core\Asset::url('/assets/css/dashboard.css') ?>" rel="stylesheet">
+    <link href="<?= \Core\Asset::url('/assets/css/avatar.css') ?>" rel="stylesheet">
 
 </head>
 

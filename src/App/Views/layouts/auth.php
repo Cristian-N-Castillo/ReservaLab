@@ -21,8 +21,8 @@ declare(strict_types=1);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/assets/css/login.css">
-    <link rel="stylesheet" href="/assets/css/avatar.css">
+    <link rel="stylesheet" href="<?= \Core\Asset::url('/assets/css/login.css') ?>">
+    <link rel="stylesheet" href="<?= \Core\Asset::url('/assets/css/avatar.css') ?>">
 
 </head>
 
