@@ -204,26 +204,27 @@ $title = $title ?? 'Cursos';
 
 </div>
 
+<script src="<?= \Core\Asset::url('/assets/js/tabla-busqueda.js') ?>"></script>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', () => {
 
     const POR_PAGINA = 7;
 
-    const buscador = document.getElementById('buscadorCursos');
-    const filas = Array.from(document.querySelectorAll('#tablaCursos tr[data-busqueda]'));
-    const sinResultados = document.getElementById('sinResultadosCursos');
     const paginacion = document.getElementById('paginacionCursos');
 
     let paginaActual = 1;
 
-    function filasCoincidentes() {
-
-        const texto = buscador ? buscador.value.trim().toLowerCase() : '';
-
-        return filas.filter(fila => fila.dataset.busqueda.includes(texto));
-
-    }
+    const tabla = inicializarBusquedaTabla({
+        buscadorId: 'buscadorCursos',
+        filasSelector: '#tablaCursos tr[data-busqueda]',
+        sinResultadosId: 'sinResultadosCursos',
+        alBuscar: () => {
+            paginaActual = 1;
+            renderizar();
+        }
+    });
 
     function crearItemPaginacion(etiqueta, pagina, deshabilitado, activo) {
 
@@ -286,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderizar() {
 
-        const coincidentes = filasCoincidentes();
+        const coincidentes = tabla.obtenerCoincidentes();
         const totalPaginas = Math.max(1, Math.ceil(coincidentes.length / POR_PAGINA));
 
         if (paginaActual > totalPaginas) {
@@ -294,24 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const inicio = (paginaActual - 1) * POR_PAGINA;
-        const visiblesEnPagina = new Set(coincidentes.slice(inicio, inicio + POR_PAGINA));
 
-        filas.forEach(fila => {
-            fila.classList.toggle('d-none', !visiblesEnPagina.has(fila));
-        });
-
-        sinResultados.classList.toggle('d-none', coincidentes.length > 0 || filas.length === 0);
+        tabla.actualizarVisibilidad(coincidentes.slice(inicio, inicio + POR_PAGINA));
 
         renderizarPaginacion(totalPaginas);
-
-    }
-
-    if (buscador) {
-
-        buscador.addEventListener('input', () => {
-            paginaActual = 1;
-            renderizar();
-        });
 
     }
 

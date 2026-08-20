@@ -323,6 +323,8 @@ $title = $title ?? 'Usuarios';
 
 </div>
 
+<script src="<?= \Core\Asset::url('/assets/js/tabla-busqueda.js') ?>"></script>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -342,33 +344,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    const buscador = document.getElementById('buscadorUsuarios');
-    const filas = Array.from(document.querySelectorAll('#tablaUsuarios tr[data-busqueda]'));
-    const sinResultados = document.getElementById('sinResultadosUsuarios');
-
-    if (buscador) {
-
-        buscador.addEventListener('input', () => {
-
-            const texto = buscador.value.trim().toLowerCase();
-            let visibles = 0;
-
-            filas.forEach(fila => {
-
-                const coincide = fila.dataset.busqueda.includes(texto);
-                fila.classList.toggle('d-none', !coincide);
-
-                if (coincide) {
-                    visibles++;
-                }
-
-            });
-
-            sinResultados.classList.toggle('d-none', visibles > 0 || filas.length === 0);
-
-        });
-
-    }
+    inicializarBusquedaTabla({
+        buscadorId: 'buscadorUsuarios',
+        filasSelector: '#tablaUsuarios tr[data-busqueda]',
+        sinResultadosId: 'sinResultadosUsuarios'
+    });
 
 });
 
