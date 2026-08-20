@@ -37,13 +37,37 @@ declare(strict_types=1);
 
     <div class="row g-0">
 
-        <aside class="col-12 col-md-3 col-lg-2 sidebar">
+        <aside
+            class="offcanvas-lg offcanvas-start col-lg-2 sidebar"
+            tabindex="-1"
+            id="sidebarOffcanvas"
+            aria-labelledby="sidebarOffcanvasLabel">
 
-            <?php require dirname(__DIR__) . '/partials/sidebar.php'; ?>
+            <div class="offcanvas-header d-lg-none">
+
+                <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">
+                    Menú
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    data-bs-target="#sidebarOffcanvas"
+                    aria-label="Cerrar">
+                </button>
+
+            </div>
+
+            <div class="offcanvas-body d-block">
+
+                <?php require dirname(__DIR__) . '/partials/sidebar.php'; ?>
+
+            </div>
 
         </aside>
 
-        <main class="col-12 col-md-9 col-lg-10 content">
+        <main class="col-12 col-lg-10 content">
 
             <?php require dirname(__DIR__) . '/partials/flash.php'; ?>
 

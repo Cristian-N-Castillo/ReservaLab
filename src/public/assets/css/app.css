@@ -238,39 +238,13 @@ h5 { font-size: 1rem; }
         padding: 18px;
     }
 
+    /* Por debajo de "lg" el sidebar es un offcanvas (cajón deslizante
+       abierto con el botón de hamburguesa); el aspecto de "columna
+       fija a la izquierda" ya no aplica, así que se resetea. */
     .sidebar {
         min-height: auto;
         border-right: none;
-        border-bottom: 1px solid #dee2e6;
-        padding: 14px 16px;
-    }
-
-    /* En móvil el menú se vuelve una fila horizontal
-       con scroll, en vez de una columna larga */
-    .sidebar-menu {
-        padding-top: 0;
-    }
-
-    .sidebar-menu ul {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 6px;
-        padding-bottom: 4px;
-    }
-
-    .sidebar-menu .nav-item {
-        margin-bottom: 0;
-        flex: 0 0 auto;
-    }
-
-    .sidebar-menu .nav-link {
-        white-space: nowrap;
-        padding: 8px 12px;
-    }
-
-    .sidebar-title {
-        display: none;
+        padding: 0;
     }
 }
 

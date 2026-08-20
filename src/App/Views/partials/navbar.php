@@ -14,13 +14,29 @@ $rol = Session::get('rol', 'Sin rol');
 
     <div class="container-fluid">
 
-        <a class="navbar-brand fw-bold d-flex align-items-center" href="/dashboard">
+        <div class="d-flex align-items-center">
 
-            <i class="bi bi-pc-display-horizontal fs-4 me-2"></i>
+            <button
+                class="btn btn-primary border-0 shadow-none d-lg-none me-2 px-2"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sidebarOffcanvas"
+                aria-controls="sidebarOffcanvas"
+                aria-label="Abrir menú">
 
-            ReservaLab
+                <i class="bi bi-list fs-3"></i>
 
-        </a>
+            </button>
+
+            <a class="navbar-brand fw-bold d-flex align-items-center mb-0" href="/dashboard">
+
+                <i class="bi bi-pc-display-horizontal fs-4 me-2"></i>
+
+                ReservaLab
+
+            </a>
+
+        </div>
 
         <div class="dropdown">
 
