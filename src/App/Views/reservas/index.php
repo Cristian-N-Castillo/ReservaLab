@@ -145,14 +145,22 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
                             </label>
 
-                            <input
-                                type="text"
-                                name="fecha"
-                                id="fecha"
-                                class="form-control"
-                                value="<?= htmlspecialchars($fecha) ?>"
-                                autocomplete="off"
-                                required>
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-calendar3"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="fecha"
+                                    id="fecha"
+                                    class="form-control"
+                                    value="<?= htmlspecialchars($fecha) ?>"
+                                    autocomplete="off"
+                                    required>
+
+                            </div>
 
                             <div class="form-text">
 
@@ -919,6 +927,17 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js"></script>
+
+<style>
+    /* El calendario de Flatpickr se ve más grande que el selector
+       nativo del navegador; lo reducimos para que calce mejor con
+       el resto del formulario. */
+    .flatpickr-calendar {
+        transform: scale(0.85);
+        transform-origin: top left;
+        font-size: 13px;
+    }
+</style>
 
 <!-- JavaScript específico del módulo Reservas -->
 <script src="/assets/js/reservas.js"></script>
