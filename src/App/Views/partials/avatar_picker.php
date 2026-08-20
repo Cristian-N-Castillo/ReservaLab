@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * @var string[] $avatares
+ * @var array<string, string[]> $avatares
  * @var string $avatarSeleccionado
  */
 
@@ -19,42 +19,64 @@ $avatarSeleccionado = $avatarSeleccionado ?? '';
         <span class="text-muted fw-normal">(opcional)</span>
     </label>
 
-    <div class="avatar-grid">
+    <div class="avatar-scroll">
 
-        <input
-            type="radio"
-            class="avatar-radio"
-            name="avatar"
-            id="avatar_ninguno"
-            value=""
-            <?= $avatarSeleccionado === '' ? 'checked' : '' ?>>
+        <div class="avatar-category-title">
+            General
+        </div>
 
-        <label
-            for="avatar_ninguno"
-            class="avatar-option"
-            title="Sin avatar">
-
-            <i class="bi bi-person-circle"></i>
-
-        </label>
-
-        <?php foreach ($avatares as $indice => $emoji): ?>
+        <div class="avatar-grid">
 
             <input
                 type="radio"
                 class="avatar-radio"
                 name="avatar"
-                id="avatar_<?= (int) $indice ?>"
-                value="<?= htmlspecialchars($emoji) ?>"
-                <?= $avatarSeleccionado === $emoji ? 'checked' : '' ?>>
+                id="avatar_ninguno"
+                value=""
+                <?= $avatarSeleccionado === '' ? 'checked' : '' ?>>
 
             <label
-                for="avatar_<?= (int) $indice ?>"
-                class="avatar-option">
+                for="avatar_ninguno"
+                class="avatar-option"
+                title="Sin avatar">
 
-                <?= $emoji ?>
+                <i class="bi bi-person-circle"></i>
 
             </label>
+
+        </div>
+
+        <?php foreach ($avatares as $categoria => $emojis): ?>
+
+            <div class="avatar-category-title">
+                <?= htmlspecialchars($categoria) ?>
+            </div>
+
+            <div class="avatar-grid">
+
+                <?php foreach ($emojis as $emoji): ?>
+
+                    <?php $idAvatar = 'avatar_' . bin2hex($emoji); ?>
+
+                    <input
+                        type="radio"
+                        class="avatar-radio"
+                        name="avatar"
+                        id="<?= $idAvatar ?>"
+                        value="<?= htmlspecialchars($emoji) ?>"
+                        <?= $avatarSeleccionado === $emoji ? 'checked' : '' ?>>
+
+                    <label
+                        for="<?= $idAvatar ?>"
+                        class="avatar-option">
+
+                        <?= $emoji ?>
+
+                    </label>
+
+                <?php endforeach; ?>
+
+            </div>
 
         <?php endforeach; ?>
 

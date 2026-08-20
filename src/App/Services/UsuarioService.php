@@ -18,18 +18,21 @@ final class UsuarioService
     private const RESET_INTENTOS_MAXIMO = 5;
 
     /**
-     * Avatares (emoji) que el usuario puede elegir para su cuenta.
-     * No se usan imágenes: los emoji se ven bien en cualquier
-     * dispositivo, sin depender de ningún servicio externo.
+     * Avatares (emoji) que el usuario puede elegir para su cuenta,
+     * agrupados por categoría para mostrarlos en el selector. No se
+     * usan imágenes: los emoji se ven bien en cualquier dispositivo,
+     * sin depender de ningún servicio externo.
      */
     private const AVATARES = [
-        // Personas
-        '👨', '👩', '🧑', '👴', '👵', '🧔', '👨‍🦱', '👩‍🦱',
-        '👨‍🦰', '👩‍🦰', '👨‍🦳', '👩‍🦳', '🧑‍🏫', '🧑‍💻', '🧑‍🔬', '🤓', '😎',
-        // Animales
-        '🐶', '🐱', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁',
-        '🐰', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🦉',
-        '🦄', '🐢', '🦋', '🐝',
+        'Personas' => [
+            '👨', '👩', '🧑', '👴', '👵', '🧔', '👨‍🦱', '👩‍🦱',
+            '👨‍🦰', '👩‍🦰', '👨‍🦳', '👩‍🦳', '🧑‍🏫', '🧑‍💻', '🧑‍🔬', '🤓', '😎',
+        ],
+        'Animales' => [
+            '🐶', '🐱', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁',
+            '🐰', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🦉',
+            '🦄', '🐢', '🦋', '🐝',
+        ],
     ];
 
     private UsuarioRepository $repository;
@@ -44,11 +47,19 @@ final class UsuarioService
     }
 
     /**
-     * @return string[]
+     * @return array<string, string[]>
      */
     public static function avatares(): array
     {
         return self::AVATARES;
+    }
+
+    /**
+     * @return string[]
+     */
+    private static function avataresPlanos(): array
+    {
+        return array_merge(...array_values(self::AVATARES));
     }
 
     /**
@@ -222,7 +233,7 @@ final class UsuarioService
     {
         $avatar = trim($avatar);
 
-        if ($avatar !== '' && !in_array($avatar, self::AVATARES, true)) {
+        if ($avatar !== '' && !in_array($avatar, self::avataresPlanos(), true)) {
             throw new InvalidArgumentException(
                 'El avatar seleccionado no es válido.'
             );
