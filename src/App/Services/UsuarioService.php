@@ -17,6 +17,21 @@ final class UsuarioService
     private const PASSWORD_MINIMO = 8;
     private const RESET_INTENTOS_MAXIMO = 5;
 
+    /**
+     * Avatares (emoji) que el usuario puede elegir para su cuenta.
+     * No se usan imágenes: los emoji se ven bien en cualquier
+     * dispositivo, sin depender de ningún servicio externo.
+     */
+    private const AVATARES = [
+        // Personas
+        '👨', '👩', '🧑', '👴', '👵', '🧔', '👨‍🦱', '👩‍🦱',
+        '👨‍🦰', '👩‍🦰', '👨‍🦳', '👩‍🦳', '🧑‍🏫', '🧑‍💻', '🧑‍🔬', '🤓', '😎',
+        // Animales
+        '🐶', '🐱', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁',
+        '🐰', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🦉',
+        '🦄', '🐢', '🦋', '🐝',
+    ];
+
     private UsuarioRepository $repository;
     private RolRepository $rolRepository;
     private NotificacionService $notificacion;
@@ -26,6 +41,14 @@ final class UsuarioService
         $this->repository = new UsuarioRepository();
         $this->rolRepository = new RolRepository();
         $this->notificacion = new NotificacionService();
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function avatares(): array
+    {
+        return self::AVATARES;
     }
 
     /**
@@ -187,6 +210,25 @@ final class UsuarioService
         $hash = password_hash($nueva, PASSWORD_DEFAULT);
 
         $this->repository->actualizarPassword($id, $hash);
+    }
+
+    /**
+     * Guarda el avatar elegido por el propio usuario. Un valor
+     * vacío es válido (equivale a "sin avatar", vuelve al ícono
+     * genérico); cualquier otro valor debe venir de la lista de
+     * avatares disponibles.
+     */
+    public function actualizarAvatar(int $id, string $avatar): void
+    {
+        $avatar = trim($avatar);
+
+        if ($avatar !== '' && !in_array($avatar, self::AVATARES, true)) {
+            throw new InvalidArgumentException(
+                'El avatar seleccionado no es válido.'
+            );
+        }
+
+        $this->repository->actualizarAvatar($id, $avatar);
     }
 
     /**

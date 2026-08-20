@@ -39,6 +39,8 @@ final class PerfilController extends Controller
             [
                 'title' => 'Mi perfil',
                 'usuario' => $usuario,
+                'avatares' => UsuarioService::avatares(),
+                'avatarSeleccionado' => $usuario->avatar,
             ]
         );
     }
@@ -64,14 +66,20 @@ final class PerfilController extends Controller
             activo: $actual->activo
         );
 
+        $avatar = (string) $request->input('avatar', '');
+
         try {
 
             $this->service->actualizar($usuario);
+
+            $this->service->actualizarAvatar($idUsuario, $avatar);
 
             Session::set(
                 'nombre',
                 trim($usuario->nombres . ' ' . $usuario->apellidos)
             );
+
+            Session::set('avatar', $avatar);
 
             Session::flash(
                 'success',

@@ -16,6 +16,7 @@ final class Usuario
         public string $correo = '',
         public string $telefono = '',
         public string $password = '',
+        public string $avatar = '',
         public bool $activo = true,
         public bool $debe_cambiar_password = true,
         public ?string $ultimo_login = null,

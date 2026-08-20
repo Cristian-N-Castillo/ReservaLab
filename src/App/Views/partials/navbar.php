@@ -7,6 +7,7 @@ use Core\Session;
 
 $nombre = Session::get('nombre', 'Invitado');
 $rol = Session::get('rol', 'Sin rol');
+$avatar = (string) Session::get('avatar', '');
 
 ?>
 
@@ -46,7 +47,15 @@ $rol = Session::get('rol', 'Sin rol');
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
 
-                <i class="bi bi-person-circle fs-3 me-2"></i>
+                <?php if ($avatar !== ''): ?>
+
+                    <span class="navbar-avatar me-2"><?= $avatar ?></span>
+
+                <?php else: ?>
+
+                    <i class="bi bi-person-circle fs-3 me-2"></i>
+
+                <?php endif; ?>
 
                 <div class="text-start">
 

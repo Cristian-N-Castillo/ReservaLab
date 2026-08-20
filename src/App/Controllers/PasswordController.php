@@ -27,6 +27,8 @@ final class PasswordController extends Controller
             'auth.cambiar_password',
             [
                 'title' => 'Cambiar contraseña',
+                'avatares' => UsuarioService::avatares(),
+                'avatarSeleccionado' => (string) Session::get('avatar', ''),
             ],
             'auth'
         );
@@ -40,12 +42,17 @@ final class PasswordController extends Controller
 
         $nueva = (string) $request->input('password', '');
         $confirmacion = (string) $request->input('password_confirm', '');
+        $avatar = (string) $request->input('avatar', '');
 
         try {
 
             $this->service->cambiarPassword($idUsuario, $nueva, $confirmacion);
 
+            $this->service->actualizarAvatar($idUsuario, $avatar);
+
             Session::set('debe_cambiar_password', false);
+
+            Session::set('avatar', $avatar);
 
             Session::flash(
                 'success',

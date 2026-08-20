@@ -103,6 +103,12 @@ use Core\Session;
 
                             </div>
 
+                            <div class="mb-4">
+
+                                <?php require dirname(__DIR__) . '/partials/avatar_picker.php'; ?>
+
+                            </div>
+
                             <button class="btn btn-primary btn-lg w-100">
 
                                 <i class="bi bi-check-circle me-2"></i>

@@ -226,6 +226,30 @@ final class UsuarioRepository extends Repository
     }
 
     /**
+     * Guarda el avatar (emoji) elegido por el propio usuario.
+     * Se mantiene separado de update() para que la edición de un
+     * usuario desde el panel de Administrador nunca pueda borrar
+     * el avatar elegido por su dueño.
+     */
+    public function actualizarAvatar(int $id, string $avatar): void
+    {
+        $sql = "
+            UPDATE usuarios
+            SET
+                avatar = :avatar,
+                updated_at = NOW()
+            WHERE id_usuario = :id
+        ";
+
+        $statement = $this->db->prepare($sql);
+
+        $statement->execute([
+            'avatar' => $avatar !== '' ? $avatar : null,
+            'id' => $id
+        ]);
+    }
+
+    /**
      * Genera un código numérico de 6 dígitos para recuperar la
      * contraseña, válido por 15 minutos. Se guarda solo su hash
      * (nunca el código en texto plano) y se reinician los intentos.
@@ -366,6 +390,7 @@ final class UsuarioRepository extends Repository
             correo: $row['correo'],
             telefono: $row['telefono'],
             password: $row['password'],
+            avatar: $row['avatar'] ?? '',
             activo: (bool) $row['activo'],
             debe_cambiar_password: (bool) $row['debe_cambiar_password'],
             ultimo_login: $row['ultimo_login'],

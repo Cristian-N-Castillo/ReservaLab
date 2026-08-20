@@ -71,6 +71,11 @@ final class AuthService
             $usuario->debe_cambiar_password
         );
 
+        Session::set(
+            'avatar',
+            $usuario->avatar
+        );
+
         return true;
     }
 
