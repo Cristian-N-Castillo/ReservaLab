@@ -183,6 +183,8 @@ final class ReservaService
          * =========================================================
          */
 
+        date_default_timezone_set('America/Santiago');
+
         $fecha = trim($fecha);
 
         if ($fecha === '') {
@@ -232,6 +234,25 @@ final class ReservaService
             throw new InvalidArgumentException(
                 'No se pueden realizar reservas los días sábado ni domingo.'
             );
+        }
+
+        /*
+         * Si la reserva es para el día de hoy, el bloque horario
+         * elegido ya no puede haber terminado.
+         */
+        if ($fechaObjeto == $hoy) {
+
+            $horaActual = (new \DateTimeImmutable('now'))->format('H:i:s');
+
+            if ($horario->hora_fin !== '' && $horaActual >= $horario->hora_fin) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'No se puede reservar el bloque "%s": ya pasó su horario de término (%s).',
+                        $horario->nombre,
+                        substr($horario->hora_fin, 0, 5)
+                    )
+                );
+            }
         }
 
         /*
