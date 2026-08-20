@@ -13,5 +13,8 @@ RUN docker-php-ext-install pdo pdo_pgsql
 # Instalar Composer desde la imagen oficial
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# No mostrar errores/warnings de PHP en la respuesta HTTP; van al log
+COPY docker/php/production.ini /usr/local/etc/php/conf.d/production.ini
+
 # Directorio de trabajo
 WORKDIR /var/www/html

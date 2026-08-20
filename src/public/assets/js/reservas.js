@@ -58,6 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
      * /reservas?fecha=2026-08-11&id_laboratorio=2
      */
 
+    const esFinDeSemana = (fechaTexto) => {
+
+        const [anio, mes, dia] = fechaTexto.split('-').map(Number);
+
+        const diaSemana = new Date(anio, mes - 1, dia).getDay();
+
+        return diaSemana === 0 || diaSemana === 6;
+    };
+
     const actualizarAgenda = () => {
 
         const fecha = inputFecha.value;
@@ -65,6 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const idLaboratorio = selectLaboratorio.value;
 
         if (!fecha || !idLaboratorio) {
+            return;
+        }
+
+        if (esFinDeSemana(fecha)) {
+
+            alert(
+                'No se pueden realizar reservas los días sábado ni domingo. ' +
+                'Por favor seleccione otra fecha.'
+            );
+
+            inputFecha.value = '';
+
             return;
         }
 

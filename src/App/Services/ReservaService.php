@@ -226,6 +226,14 @@ final class ReservaService
             );
         }
 
+        $diaSemana = (int) $fechaObjeto->format('N');
+
+        if ($diaSemana >= 6) {
+            throw new InvalidArgumentException(
+                'No se pueden realizar reservas los días sábado ni domingo.'
+            );
+        }
+
         /*
          * =========================================================
          * VALIDACIÓN DEL MOTIVO
@@ -432,6 +440,64 @@ final class ReservaService
 
         $this->repository->actualizarEstado($id, (int) $estado['id_estado']);
         $this->repository->invalidarToken($id);
+    }
+
+    /**
+     * Envía un correo de recordatorio a las reservas que llevan más
+     * de $minutos minutos en estado Pendiente, sin confirmar ni
+     * cancelar. Cada reserva recibe el recordatorio una sola vez.
+     *
+     * Pensado para ejecutarse periódicamente desde un cron
+     * (ver console reservas:recordatorios).
+     *
+     * Retorna la cantidad de recordatorios enviados.
+     */
+    public function enviarRecordatoriosPendientes(int $minutos = 5): int
+    {
+        $pendientes = $this->repository->pendientesParaRecordatorio($minutos);
+
+        $baseUrl = rtrim((string) Config::get('APP_URL', ''), '/');
+
+        $enviados = 0;
+
+        foreach ($pendientes as $reserva) {
+
+            if (empty($reserva['correo'])) {
+                continue;
+            }
+
+            $idReserva = (int) $reserva['id_reserva'];
+            $token = (string) $reserva['token_confirmacion'];
+
+            $datosVista = [
+                'nombres' => $reserva['nombres'],
+                'apellidos' => $reserva['apellidos'],
+                'fecha' => $reserva['fecha'],
+                'horario' => $reserva['horario'],
+                'hora_inicio' => $reserva['hora_inicio'],
+                'hora_fin' => $reserva['hora_fin'],
+                'laboratorio' => $reserva['laboratorio'],
+                'curso' => $reserva['curso'],
+                'urlConfirmar' => "{$baseUrl}/api/reservas/{$idReserva}/confirmar/{$token}",
+                'urlCancelar' => "{$baseUrl}/api/reservas/{$idReserva}/cancelar/{$token}",
+            ];
+
+            $html = View::render('emails.reserva_recordatorio_html', $datosVista, null);
+            $texto = View::render('emails.reserva_recordatorio_texto', $datosVista, null);
+
+            $this->notificacion->enviarHtml(
+                $reserva['correo'],
+                'Recordatorio: confirma tu reserva de laboratorio - ReservaLab',
+                $html,
+                $texto
+            );
+
+            $this->repository->marcarRecordatorioEnviado($idReserva);
+
+            $enviados++;
+        }
+
+        return $enviados;
     }
 
     /**

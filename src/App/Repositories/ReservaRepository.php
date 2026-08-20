@@ -664,6 +664,86 @@ final class ReservaRepository extends Repository
     }
 
     /**
+     * Reservas Pendientes cuyo correo de confirmación se envió hace
+     * más de $minutos minutos y que todavía no recibieron el
+     * recordatorio (se usa para avisar al docente que aún no ha
+     * confirmado ni cancelado la reserva).
+     */
+    public function pendientesParaRecordatorio(int $minutos): array
+    {
+        $sql = "
+            SELECT
+                r.id_reserva,
+                r.fecha,
+                r.motivo,
+                r.token_confirmacion,
+
+                h.nombre AS horario,
+                h.hora_inicio,
+                h.hora_fin,
+
+                l.nombre AS laboratorio,
+
+                c.nombre AS curso,
+
+                u.nombres,
+                u.apellidos,
+                u.correo
+
+            FROM reservas r
+
+            INNER JOIN horarios h
+                ON h.id_horario = r.id_horario
+
+            INNER JOIN laboratorios l
+                ON l.id_laboratorio = r.id_laboratorio
+
+            INNER JOIN cursos c
+                ON c.id_curso = r.id_curso
+
+            INNER JOIN usuarios u
+                ON u.id_usuario = r.id_usuario
+
+            INNER JOIN estados_reserva er
+                ON er.id_estado = r.id_estado
+
+            WHERE LOWER(er.nombre) = 'pendiente'
+              AND r.recordatorio_enviado = FALSE
+              AND r.token_confirmacion IS NOT NULL
+              AND r.created_at <= NOW() - (:minutos || ' minutes')::interval
+
+            ORDER BY r.created_at ASC
+        ";
+
+        $statement = $this->db->prepare($sql);
+
+        $statement->execute([
+            'minutos' => $minutos
+        ]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Marca que ya se envió el recordatorio de una reserva Pendiente,
+     * para no volver a enviarlo.
+     */
+    public function marcarRecordatorioEnviado(int $id): void
+    {
+        $sql = "
+            UPDATE reservas
+            SET recordatorio_enviado = TRUE
+            WHERE id_reserva = :id
+        ";
+
+        $statement = $this->db->prepare($sql);
+
+        $statement->execute([
+            'id' => $id
+        ]);
+    }
+
+    /**
      * Convierte un registro en un objeto Reserva.
      */
     private function hydrate(array $row): Reserva

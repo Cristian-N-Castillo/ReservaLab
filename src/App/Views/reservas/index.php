@@ -157,7 +157,7 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
                             <div class="form-text">
 
-                                Seleccione la fecha en que utilizará el laboratorio.
+                                Seleccione la fecha en que utilizará el laboratorio. No se aceptan reservas los días sábado ni domingo.
 
                             </div>
 

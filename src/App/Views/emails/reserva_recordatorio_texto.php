@@ -11,7 +11,6 @@ declare(strict_types=1);
  * @var string $hora_fin
  * @var string $laboratorio
  * @var string $curso
- * @var string $motivo
  * @var string $urlConfirmar
  * @var string $urlCancelar
  */
@@ -19,7 +18,7 @@ declare(strict_types=1);
 ?>
 Estimado/a <?= $nombres . ' ' . $apellidos ?>,
 
-Se ha registrado la siguiente reserva a su nombre:
+Le recordamos que aún no ha confirmado ni cancelado la siguiente reserva:
 
 Laboratorio: <?= $laboratorio ?>
 
@@ -29,14 +28,10 @@ Fecha: <?= $fecha ?>
 
 Horario: <?= $horario ?> (<?= substr((string) $hora_inicio, 0, 5) ?> - <?= substr((string) $hora_fin, 0, 5) ?>)
 
-Motivo: <?= $motivo ?>
-
-Recordatorio: cuiden los equipos del laboratorio. No está permitido comer ni beber líquidos dentro de la sala.
-
 Para CONFIRMAR la reserva, ingrese a:
 <?= $urlConfirmar ?>
 
 Para CANCELAR la reserva, ingrese a:
 <?= $urlCancelar ?>
 
-Este enlace es personal y de un solo uso, y expira al finalizar el día de la reserva.
+Este enlace es personal y de un solo uso, y expira al finalizar el día de la reserva. Si ya no necesita el laboratorio, cancele la reserva para liberar el horario a otros docentes.
