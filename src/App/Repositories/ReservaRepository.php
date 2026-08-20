@@ -565,6 +565,7 @@ final class ReservaRepository extends Repository
         $sql = "
             SELECT
                 r.id_reserva,
+                r.id_usuario,
                 r.fecha,
                 r.motivo,
 

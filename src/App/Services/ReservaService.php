@@ -79,6 +79,15 @@ final class ReservaService
     }
 
     /**
+     * Reservas dentro de un rango de fechas (incluye canceladas),
+     * para pintar el calendario mensual.
+     */
+    public function porRangoFechas(string $desde, string $hasta): array
+    {
+        return $this->repository->historial($desde, $hasta);
+    }
+
+    /**
      * Crea una nueva reserva.
      */
     public function crear(

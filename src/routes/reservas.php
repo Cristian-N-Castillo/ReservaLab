@@ -14,6 +14,12 @@ $router->get(
     [AuthMiddleware::class]
 );
 
+$router->get(
+    '/reservas/calendario',
+    [ReservaController::class, 'calendario'],
+    [AuthMiddleware::class]
+);
+
 $router->post(
     '/reservas',
     [ReservaController::class, 'store'],

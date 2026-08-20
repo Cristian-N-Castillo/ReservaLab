@@ -588,7 +588,7 @@ function horaDashboard(?string $hora): string
                         <div class="p-3 border-top text-end">
 
                             <a
-                                href="/reservas"
+                                href="/reservas/calendario"
                                 class="btn btn-sm btn-outline-primary">
 
                                 Ver agenda de reservas

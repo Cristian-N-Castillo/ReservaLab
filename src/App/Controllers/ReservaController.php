@@ -116,6 +116,105 @@ final class ReservaController extends Controller
     }
 
     /**
+     * Muestra el calendario mensual de reservas, coloreadas
+     * según su estado.
+     */
+    public function calendario(): string
+    {
+        date_default_timezone_set('America/Santiago');
+
+        $request = new Request();
+
+        $anio = (int) $request->input('anio', (int) date('Y'));
+        $mes = (int) $request->input('mes', (int) date('n'));
+
+        if ($mes < 1 || $mes > 12) {
+            $mes = (int) date('n');
+        }
+
+        $primerDiaMes = \DateTimeImmutable::createFromFormat(
+            '!Y-m-d',
+            sprintf('%04d-%02d-01', $anio, $mes)
+        );
+
+        if ($primerDiaMes === false) {
+            $primerDiaMes = new \DateTimeImmutable('first day of this month');
+        }
+
+        $ultimoDiaMes = $primerDiaMes->modify('last day of this month');
+
+        /*
+         * La grilla siempre muestra semanas completas (lunes a
+         * domingo), incluyendo días del mes anterior/siguiente
+         * para rellenar la primera y última semana.
+         */
+        $inicioGrilla = $primerDiaMes->modify(
+            '-' . ((int) $primerDiaMes->format('N') - 1) . ' days'
+        );
+
+        $finGrilla = $ultimoDiaMes->modify(
+            '+' . (7 - (int) $ultimoDiaMes->format('N')) . ' days'
+        );
+
+        $reservas = $this->reservaService->porRangoFechas(
+            $inicioGrilla->format('Y-m-d'),
+            $finGrilla->format('Y-m-d')
+        );
+
+        $reservasPorDia = [];
+
+        foreach ($reservas as $reserva) {
+            $reservasPorDia[$reserva['fecha']][] = $reserva;
+        }
+
+        $hoy = (new \DateTimeImmutable('today'))->format('Y-m-d');
+        $horaActual = (new \DateTimeImmutable('now'))->format('H:i');
+
+        $semanas = [];
+        $cursor = $inicioGrilla;
+
+        while ($cursor <= $finGrilla) {
+
+            $semana = [];
+
+            for ($i = 0; $i < 7; $i++) {
+
+                $fechaTexto = $cursor->format('Y-m-d');
+
+                $semana[] = [
+                    'fecha' => $fechaTexto,
+                    'dia' => (int) $cursor->format('j'),
+                    'esMesActual' => $cursor->format('n') === $primerDiaMes->format('n'),
+                    'esHoy' => $fechaTexto === $hoy,
+                    'reservas' => $reservasPorDia[$fechaTexto] ?? [],
+                ];
+
+                $cursor = $cursor->modify('+1 day');
+            }
+
+            $semanas[] = $semana;
+        }
+
+        $mesAnterior = $primerDiaMes->modify('-1 month');
+        $mesSiguiente = $primerDiaMes->modify('+1 month');
+
+        return $this->view(
+            'reservas.calendario',
+            [
+                'title' => 'Calendario de Reservas',
+                'semanas' => $semanas,
+                'nombreMes' => $primerDiaMes,
+                'hoy' => $hoy,
+                'horaActual' => $horaActual,
+                'anioAnterior' => (int) $mesAnterior->format('Y'),
+                'mesAnterior' => (int) $mesAnterior->format('n'),
+                'anioSiguiente' => (int) $mesSiguiente->format('Y'),
+                'mesSiguiente' => (int) $mesSiguiente->format('n'),
+            ]
+        );
+    }
+
+    /**
      * Guarda una nueva reserva.
      */
     public function store(): never
