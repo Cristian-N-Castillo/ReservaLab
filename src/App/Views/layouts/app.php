@@ -26,6 +26,7 @@ declare(strict_types=1);
         href="/assets/css/app.css"
         rel="stylesheet">
     <link href="/assets/css/dashboard.css" rel="stylesheet">
+    <link href="/assets/css/avatar.css" rel="stylesheet">
 
 </head>
 
