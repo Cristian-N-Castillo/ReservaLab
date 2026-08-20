@@ -162,12 +162,6 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
                             </div>
 
-                            <div class="form-text">
-
-                                Seleccione la fecha en que utilizará el laboratorio. Los días sábado y domingo aparecen deshabilitados.
-
-                            </div>
-
                         </div>
 
 
