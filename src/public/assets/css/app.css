@@ -15,9 +15,24 @@ body {
     min-height: 65px;
 }
 
+/* El contenedor nunca debe partirse en dos líneas: si el contenido
+   no cabe, que se achique (ver reglas de abajo), no que el botón de
+   perfil caiga a una segunda fila y quede pegado a la izquierda. */
+.navbar > .container-fluid {
+    flex-wrap: nowrap;
+}
+
 .navbar-brand {
     font-size: 1.3rem;
     font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.navbar .dropdown {
+    flex-shrink: 0;
 }
 
 /* ==========================
