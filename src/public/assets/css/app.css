@@ -12,7 +12,7 @@ body {
    ========================== */
 
 .navbar {
-    height: 65px;
+    min-height: 65px;
 }
 
 .navbar-brand {
@@ -286,5 +286,28 @@ h5 { font-size: 1rem; }
 
     .card-body {
         padding: 1rem;
+    }
+
+    /* Navbar: el bloque de perfil (ícono + nombre + rol) es lo que
+       más espacio ocupa; se achica para que quepa en una sola línea
+       y no empuje la altura de la barra. */
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .navbar .dropdown-toggle .bi-person-circle {
+        font-size: 1.4rem !important;
+    }
+
+    .navbar .dropdown-toggle .fw-semibold {
+        font-size: .8rem;
+        max-width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .navbar .dropdown-toggle small {
+        font-size: .7rem;
     }
 }
