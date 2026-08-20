@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Core\Session;
-
 /** @var string $title */
 /** @var App\Models\Rol[] $roles */
 
@@ -30,24 +28,6 @@ use Core\Session;
                 </div>
 
                 <div class="card-body">
-
-                    <?php if (Session::hasFlash('error')): ?>
-
-                        <div class="alert alert-danger alert-dismissible fade show">
-
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-
-                            <?= htmlspecialchars(Session::getFlash('error')) ?>
-
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="alert">
-                            </button>
-
-                        </div>
-
-                    <?php endif; ?>
 
                     <form action="/usuarios" method="POST">
 

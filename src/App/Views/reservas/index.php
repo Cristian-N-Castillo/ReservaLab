@@ -47,57 +47,6 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
     </div>
 
 
-    <!-- =====================================================
-         MENSAJES FLASH
-    ====================================================== -->
-
-    <?php if (Session::hasFlash('success')): ?>
-
-        <div
-            class="alert alert-success alert-dismissible fade show shadow-sm"
-            role="alert">
-
-            <i class="bi bi-check-circle-fill me-2"></i>
-
-            <?= htmlspecialchars(
-                (string) Session::getFlash('success')
-            ) ?>
-
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Cerrar">
-            </button>
-
-        </div>
-
-    <?php endif; ?>
-
-
-    <?php if (Session::hasFlash('error')): ?>
-
-        <div
-            class="alert alert-danger alert-dismissible fade show shadow-sm"
-            role="alert">
-
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-
-            <?= htmlspecialchars(
-                (string) Session::getFlash('error')
-            ) ?>
-
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Cerrar">
-            </button>
-
-        </div>
-
-    <?php endif; ?>
-
 
     <!-- =====================================================
          CONTENIDO PRINCIPAL

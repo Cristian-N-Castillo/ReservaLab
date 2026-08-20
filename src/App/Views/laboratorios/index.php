@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Core\Session;
-
 /** @var App\Models\Laboratorio[] $laboratorios */
 /** @var bool $esAdmin */
 
@@ -44,45 +42,6 @@ $esAdmin = $esAdmin ?? false;
         <?php endif; ?>
 
     </div>
-
-    <!-- Mensajes -->
-    <?php if (Session::hasFlash('success')): ?>
-
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-
-            <i class="bi bi-check-circle-fill me-2"></i>
-
-            <?= htmlspecialchars(Session::getFlash('success')) ?>
-
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Cerrar">
-            </button>
-
-        </div>
-
-    <?php endif; ?>
-
-    <?php if (Session::hasFlash('error')): ?>
-
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-
-            <?= htmlspecialchars(Session::getFlash('error')) ?>
-
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Cerrar">
-            </button>
-
-        </div>
-
-    <?php endif; ?>
 
     <!-- Tarjeta -->
     <div class="card shadow-sm border-0">
