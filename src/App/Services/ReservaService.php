@@ -10,6 +10,7 @@ use App\Repositories\EstadoReservaRepository;
 use App\Repositories\HorarioRepository;
 use App\Repositories\LaboratorioRepository;
 use App\Repositories\ReservaRepository;
+use App\Repositories\UsuarioRepository;
 use Core\Config;
 use Core\View;
 use DateTimeImmutable;
@@ -28,6 +29,7 @@ final class ReservaService
     private CursoRepository $cursoRepository;
     private LaboratorioRepository $laboratorioRepository;
     private HorarioRepository $horarioRepository;
+    private UsuarioRepository $usuarioRepository;
     private NotificacionService $notificacion;
 
     public function __construct()
@@ -37,6 +39,7 @@ final class ReservaService
         $this->cursoRepository = new CursoRepository();
         $this->laboratorioRepository = new LaboratorioRepository();
         $this->horarioRepository = new HorarioRepository();
+        $this->usuarioRepository = new UsuarioRepository();
         $this->notificacion = new NotificacionService();
     }
 
@@ -376,6 +379,8 @@ final class ReservaService
         $this->validarToken($id, $token);
 
         $this->cambiarEstadoPorNombre($id, 'Confirmada');
+
+        $this->enviarCorreoConfirmacionAdmins($id);
     }
 
     /**
@@ -558,5 +563,51 @@ final class ReservaService
             $html,
             $texto
         );
+    }
+
+    /**
+     * Avisa a todos los administradores activos que un docente
+     * confirmó una reserva. Un fallo al enviar el correo no debe
+     * afectar la confirmación ya guardada (NotificacionService
+     * registra el error en storage/logs/mail.log en vez de lanzar
+     * excepción).
+     */
+    private function enviarCorreoConfirmacionAdmins(int $idReserva): void
+    {
+        $correos = $this->usuarioRepository->findCorreosAdministradores();
+
+        if (empty($correos)) {
+            return;
+        }
+
+        $detalle = $this->repository->findDetalladaById($idReserva);
+
+        if ($detalle === null) {
+            return;
+        }
+
+        $datosVista = [
+            'nombres' => $detalle['nombres'],
+            'apellidos' => $detalle['apellidos'],
+            'fecha' => $detalle['fecha'],
+            'horario' => $detalle['horario'],
+            'hora_inicio' => $detalle['hora_inicio'],
+            'hora_fin' => $detalle['hora_fin'],
+            'laboratorio' => $detalle['laboratorio'],
+            'curso' => $detalle['curso'],
+        ];
+
+        $html = View::render('emails.reserva_confirmada_html', $datosVista, null);
+        $texto = View::render('emails.reserva_confirmada_texto', $datosVista, null);
+
+        foreach ($correos as $correo) {
+
+            $this->notificacion->enviarHtml(
+                $correo,
+                'Reserva confirmada por un docente - ReservaLab',
+                $html,
+                $texto
+            );
+        }
     }
 }

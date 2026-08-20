@@ -10,6 +10,29 @@ use PDO;
 final class UsuarioRepository extends Repository
 {
     /**
+     * Obtiene el correo de todos los administradores activos
+     * (se usa para notificarles eventos del sistema, como que un
+     * docente confirmó una reserva).
+     *
+     * @return string[]
+     */
+    public function findCorreosAdministradores(): array
+    {
+        $sql = "
+            SELECT u.correo
+            FROM usuarios u
+            INNER JOIN roles r
+                ON r.id_rol = u.id_rol
+            WHERE LOWER(r.nombre) = 'administrador'
+              AND u.activo = TRUE
+        ";
+
+        $statement = $this->db->query($sql);
+
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /**
      * Obtiene todos los usuarios.
      *
      * @return Usuario[]
