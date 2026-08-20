@@ -12,7 +12,7 @@ use Core\Session;
 
         <div class="row justify-content-center align-items-center min-vh-100">
 
-            <div class="col-xl-10">
+            <div class="col-12 col-xl-10">
 
                 <div class="card login-card border-0 shadow-lg overflow-hidden">
 
@@ -52,7 +52,7 @@ use Core\Session;
 
                         <!-- Panel Derecho -->
 
-                        <div class="col-lg-6">
+                        <div class="col-12 col-lg-6">
 
                             <div class="login-form">
 

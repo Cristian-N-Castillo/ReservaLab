@@ -11,7 +11,7 @@ $usuario ??= new \App\Models\Usuario();
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="id_rol" class="form-label">
 
@@ -45,7 +45,7 @@ $usuario ??= new \App\Models\Usuario();
 
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="rut" class="form-label">
 
@@ -68,7 +68,7 @@ $usuario ??= new \App\Models\Usuario();
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="nombres" class="form-label">
 
@@ -86,7 +86,7 @@ $usuario ??= new \App\Models\Usuario();
 
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="apellidos" class="form-label">
 
@@ -108,7 +108,7 @@ $usuario ??= new \App\Models\Usuario();
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="correo" class="form-label">
 
@@ -126,7 +126,7 @@ $usuario ??= new \App\Models\Usuario();
 
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="telefono" class="form-label">
 
@@ -149,7 +149,7 @@ $usuario ??= new \App\Models\Usuario();
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="password" class="form-label">
 
@@ -166,7 +166,7 @@ $usuario ??= new \App\Models\Usuario();
 
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="password_confirm" class="form-label">
 

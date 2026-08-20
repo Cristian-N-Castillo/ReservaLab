@@ -101,7 +101,7 @@ function horaDashboard(?string $hora): string
 
             <div class="row align-items-center">
 
-                <div class="col-md-8">
+                <div class="col-12 col-md-8">
 
                     <h2 class="fw-bold mb-2">
 
@@ -112,7 +112,7 @@ function horaDashboard(?string $hora): string
 
                 </div>
 
-                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
 
                     <h6 class="text-secondary mb-1">
 
@@ -147,7 +147,7 @@ function horaDashboard(?string $hora): string
 
         <!-- Usuarios -->
 
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
 
             <div class="card stat-card shadow-sm h-100">
 
@@ -190,7 +190,7 @@ function horaDashboard(?string $hora): string
 
         <!-- Laboratorios -->
 
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
 
             <div class="card stat-card shadow-sm h-100">
 
@@ -233,7 +233,7 @@ function horaDashboard(?string $hora): string
 
         <!-- Reservas Hoy -->
 
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
 
             <div class="card stat-card shadow-sm h-100">
 
@@ -276,7 +276,7 @@ function horaDashboard(?string $hora): string
 
         <!-- Cursos -->
 
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
 
             <div class="card stat-card shadow-sm h-100">
 
@@ -327,7 +327,7 @@ function horaDashboard(?string $hora): string
 
         <!-- Próximas Reservas -->
 
-        <div class="col-lg-8 mb-4">
+        <div class="col-12 col-lg-8 mb-4">
 
             <div class="card dashboard-card h-100">
 
@@ -428,7 +428,7 @@ function horaDashboard(?string $hora): string
 
                                         <!-- Fecha -->
 
-                                        <div class="col-md-2">
+                                        <div class="col-6 col-md-2">
 
                                             <div class="text-primary fw-bold">
 
@@ -445,7 +445,7 @@ function horaDashboard(?string $hora): string
 
                                         <!-- Bloque -->
 
-                                        <div class="col-md-3">
+                                        <div class="col-6 col-md-3">
 
                                             <div class="fw-bold">
 
@@ -485,7 +485,7 @@ function horaDashboard(?string $hora): string
 
                                         <!-- Laboratorio / Curso -->
 
-                                        <div class="col-md-3">
+                                        <div class="col-6 col-md-3">
 
                                             <div class="fw-semibold">
 
@@ -518,7 +518,7 @@ function horaDashboard(?string $hora): string
 
                                         <!-- Responsable -->
 
-                                        <div class="col-md-2">
+                                        <div class="col-6 col-md-2">
 
                                             <small class="text-muted d-block">
                                                 Responsable
@@ -547,7 +547,7 @@ function horaDashboard(?string $hora): string
 
                                         <!-- Estado / acción -->
 
-                                        <div class="col-md-2 text-md-end">
+                                        <div class="col-12 col-md-2 text-md-end mt-2 mt-md-0">
 
                                             <span
                                                 class="badge <?= $badgeEstado ?> mb-2">
@@ -610,7 +610,7 @@ function horaDashboard(?string $hora): string
 
         <!-- Accesos rápidos -->
 
-        <div class="col-lg-4 mb-4">
+        <div class="col-12 col-lg-4 mb-4">
 
             <div class="card dashboard-card h-100">
 
@@ -747,7 +747,7 @@ function horaDashboard(?string $hora): string
 
                 ?>
 
-                <div class="col-lg-6 mb-4">
+                <div class="col-12 col-lg-6 mb-4">
 
                     <div class="card dashboard-card h-100">
 
@@ -793,7 +793,7 @@ function horaDashboard(?string $hora): string
 
                                 <!-- Capacidad -->
 
-                                <div class="col-sm-6">
+                                <div class="col-6">
 
                                     <div
                                         class="border rounded p-3 h-100">
@@ -822,7 +822,7 @@ function horaDashboard(?string $hora): string
 
                                 <!-- Próxima reserva -->
 
-                                <div class="col-sm-6">
+                                <div class="col-6">
 
                                     <div
                                         class="border rounded p-3 h-100">

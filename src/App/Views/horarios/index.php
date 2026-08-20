@@ -57,7 +57,7 @@ $title = $title ?? 'Horarios';
 
             <?php foreach ($horarios as $horario): ?>
 
-                <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="col-12 col-md-6 col-lg-4 col-xl-4">
 
                     <div class="card shadow-sm border-0 h-100">
 

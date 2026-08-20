@@ -12,7 +12,7 @@ use Core\Session;
 
     <div class="row justify-content-center">
 
-        <div class="col-lg-8">
+        <div class="col-12 col-lg-8">
 
             <div class="card shadow-sm border-0">
 

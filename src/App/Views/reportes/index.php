@@ -39,7 +39,7 @@ $title = $title ?? 'Reportes';
 
             <form action="/reportes" method="GET" class="row g-3 align-items-end">
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <label for="fecha_desde" class="form-label fw-semibold">Desde</label>
                     <input
                         type="date"
@@ -49,7 +49,7 @@ $title = $title ?? 'Reportes';
                         value="<?= htmlspecialchars($fechaDesde) ?>">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <label for="fecha_hasta" class="form-label fw-semibold">Hasta</label>
                     <input
                         type="date"
@@ -59,7 +59,7 @@ $title = $title ?? 'Reportes';
                         value="<?= htmlspecialchars($fechaHasta) ?>">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-12 col-md-3">
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-funnel-fill me-2"></i>
                         Filtrar
@@ -79,7 +79,7 @@ $title = $title ?? 'Reportes';
     <div class="row g-4 mb-4">
 
         <!-- Reservas por laboratorio -->
-        <div class="col-lg-4">
+        <div class="col-12 col-md-6 col-lg-4">
 
             <div class="card shadow-sm border-0 h-100">
 
@@ -124,7 +124,7 @@ $title = $title ?? 'Reportes';
         </div>
 
         <!-- Reservas por docente -->
-        <div class="col-lg-4">
+        <div class="col-12 col-md-6 col-lg-4">
 
             <div class="card shadow-sm border-0 h-100">
 
@@ -173,7 +173,7 @@ $title = $title ?? 'Reportes';
         </div>
 
         <!-- Reservas por curso -->
-        <div class="col-lg-4">
+        <div class="col-12 col-md-6 col-lg-4">
 
             <div class="card shadow-sm border-0 h-100">
 

@@ -41,12 +41,12 @@ $esAdmin = $esAdmin ?? false;
 
             <div class="row g-3">
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <small class="text-muted d-block">Fecha</small>
                     <strong><?= htmlspecialchars((string) $reserva['fecha']) ?></strong>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <small class="text-muted d-block">Bloque</small>
                     <strong>
                         <?= htmlspecialchars((string) $reserva['horario']) ?>
@@ -55,17 +55,17 @@ $esAdmin = $esAdmin ?? false;
                     </strong>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <small class="text-muted d-block">Laboratorio</small>
                     <strong><?= htmlspecialchars((string) $reserva['laboratorio']) ?></strong>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <small class="text-muted d-block">Curso</small>
                     <strong><?= htmlspecialchars((string) $reserva['curso']) ?></strong>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <small class="text-muted d-block">Docente</small>
                     <strong>
                         <?= htmlspecialchars(
@@ -74,7 +74,7 @@ $esAdmin = $esAdmin ?? false;
                     </strong>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <small class="text-muted d-block">Estado</small>
                     <span class="badge bg-primary">
                         <?= htmlspecialchars((string) $reserva['estado']) ?>
@@ -83,7 +83,7 @@ $esAdmin = $esAdmin ?? false;
 
                 <?php if (!empty($reserva['motivo'])): ?>
 
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <small class="text-muted d-block">Motivo</small>
                         <strong><?= htmlspecialchars((string) $reserva['motivo']) ?></strong>
                     </div>
@@ -101,7 +101,7 @@ $esAdmin = $esAdmin ?? false;
         <?php if ($esAdmin): ?>
 
         <!-- Formulario nueva observación -->
-        <div class="col-lg-5">
+        <div class="col-12 col-lg-5">
 
             <div class="card shadow-sm border-0 h-100">
 
@@ -179,7 +179,7 @@ $esAdmin = $esAdmin ?? false;
         <?php endif; ?>
 
         <!-- Historial de observaciones -->
-        <div class="<?= $esAdmin ? 'col-lg-7' : 'col-lg-12' ?>">
+        <div class="<?= $esAdmin ? 'col-12 col-lg-7' : 'col-12' ?>">
 
             <div class="card shadow-sm border-0 h-100">
 

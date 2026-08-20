@@ -60,7 +60,7 @@ function horaDashboardDocente(?string $hora): string
 
             <div class="row align-items-center">
 
-                <div class="col-md-8">
+                <div class="col-12 col-md-8">
 
                     <h2 class="fw-bold mb-2">
                         👋 Bienvenido, <?= htmlspecialchars((string) $nombre) ?>
@@ -68,7 +68,7 @@ function horaDashboardDocente(?string $hora): string
 
                 </div>
 
-                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
 
                     <h6 class="text-secondary mb-1">
                         <i class="bi bi-calendar-event me-1"></i>
@@ -91,7 +91,7 @@ function horaDashboardDocente(?string $hora): string
     <!-- Estadísticas -->
     <div class="row g-4 mb-4">
 
-        <div class="col-sm-4">
+        <div class="col-12 col-sm-4">
 
             <div class="card stat-card shadow-sm h-100">
 
@@ -117,7 +117,7 @@ function horaDashboardDocente(?string $hora): string
 
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-12 col-sm-4">
 
             <div class="card stat-card shadow-sm h-100">
 
@@ -143,7 +143,7 @@ function horaDashboardDocente(?string $hora): string
 
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-12 col-sm-4">
 
             <div class="card stat-card shadow-sm h-100">
 

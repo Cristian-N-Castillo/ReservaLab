@@ -14,7 +14,7 @@ use Core\Session;
 
         <div class="row justify-content-center align-items-center min-vh-100">
 
-            <div class="col-xl-5 col-lg-6 col-md-8">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
                 <div class="card login-card border-0 shadow-lg overflow-hidden">
 

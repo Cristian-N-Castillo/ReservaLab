@@ -84,7 +84,7 @@ $title = $title ?? 'Usuarios';
             <!-- Buscador -->
             <div class="row mb-4">
 
-                <div class="col-md-5">
+                <div class="col-12 col-md-5">
 
                     <div class="input-group">
 

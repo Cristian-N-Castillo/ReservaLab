@@ -109,7 +109,7 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
              FORMULARIO
         ================================================== -->
 
-        <div class="col-lg-5">
+        <div class="col-12 col-lg-5">
 
             <div class="card shadow-sm border-0 h-100">
 
@@ -355,7 +355,7 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
              BLOQUES HORARIOS
         ================================================== -->
 
-        <div class="col-lg-7">
+        <div class="col-12 col-lg-7">
 
             <div class="card shadow-sm border-0 h-100">
 
@@ -435,7 +435,7 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
                                 ?>
 
-                                <div class="col-md-6">
+                                <div class="col-12 col-md-6">
 
                                     <div
                                         class="card h-100 <?= $reservado

@@ -10,7 +10,7 @@ $laboratorio ??= new \App\Models\Laboratorio();
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="nombre" class="form-label">
 
@@ -30,7 +30,7 @@ $laboratorio ??= new \App\Models\Laboratorio();
 
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="ubicacion" class="form-label">
 
@@ -53,7 +53,7 @@ $laboratorio ??= new \App\Models\Laboratorio();
 
 <div class="row">
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="capacidad" class="form-label">
 
@@ -73,7 +73,7 @@ $laboratorio ??= new \App\Models\Laboratorio();
 
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 col-md-6 mb-3">
 
         <label for="especialidad_prioritaria" class="form-label">
 
