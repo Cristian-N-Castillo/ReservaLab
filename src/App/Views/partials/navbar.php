@@ -28,7 +28,7 @@ $rol = Session::get('rol', 'Sin rol');
 
             </button>
 
-            <a class="navbar-brand fw-bold d-flex align-items-center mb-0" href="/dashboard">
+            <a class="navbar-brand fw-bold d-none d-lg-flex align-items-center mb-0" href="/dashboard">
 
                 <i class="bi bi-pc-display-horizontal fs-4 me-2"></i>
 

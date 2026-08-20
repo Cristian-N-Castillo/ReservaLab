@@ -43,10 +43,14 @@ declare(strict_types=1);
             id="sidebarOffcanvas"
             aria-labelledby="sidebarOffcanvasLabel">
 
-            <div class="offcanvas-header d-lg-none">
+            <div class="offcanvas-header d-lg-none border-bottom">
 
-                <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">
-                    Menú
+                <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="sidebarOffcanvasLabel">
+
+                    <i class="bi bi-pc-display-horizontal fs-4 me-2 text-primary"></i>
+
+                    ReservaLab
+
                 </h5>
 
                 <button
