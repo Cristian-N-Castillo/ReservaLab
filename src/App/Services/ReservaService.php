@@ -199,11 +199,18 @@ final class ReservaService
         }
 
         /*
-         * Los correos se envían recién después del commit: un fallo
-         * al enviar no debe revertir reservas ya guardadas.
+         * El correo se envía recién después del commit: un fallo al
+         * enviar no debe revertir reservas ya guardadas.
+         *
+         * Si se reservó un solo bloque, se usa el correo individual
+         * de siempre. Si se reservaron varios, se envía un único
+         * correo con todos los bloques juntos (uno por reserva sería
+         * tedioso para el docente).
          */
-        foreach ($idsReserva as $idReserva) {
-            $this->notificarReservaCreada($idReserva, $fecha);
+        if (count($idsReserva) === 1) {
+            $this->notificarReservaCreada($idsReserva[0], $fecha);
+        } else {
+            $this->notificarReservasCreadas($idsReserva, $fecha);
         }
     }
 
@@ -502,6 +509,69 @@ final class ReservaService
         $token = $this->repository->generarToken($idReserva, $fecha);
 
         $this->enviarCorreoConfirmacion($idReserva, $token);
+    }
+
+    /**
+     * Genera el token de cada reserva y envía un único correo con
+     * todos los bloques juntos (usado cuando crearMultiple() creó
+     * más de una reserva). Cada bloque conserva su propio enlace de
+     * confirmar/cancelar, ya que sigue siendo una reserva
+     * independiente.
+     *
+     * Un fallo al enviar el correo no debe afectar las reservas ya
+     * guardadas.
+     */
+    private function notificarReservasCreadas(array $idsReserva, string $fecha): void
+    {
+        $baseUrl = rtrim((string) Config::get('APP_URL', ''), '/');
+
+        $bloques = [];
+        $detalleComun = null;
+
+        foreach ($idsReserva as $idReserva) {
+
+            $detalle = $this->repository->findDetalladaById($idReserva);
+
+            if ($detalle === null || empty($detalle['correo'])) {
+                continue;
+            }
+
+            $detalleComun ??= $detalle;
+
+            $token = $this->repository->generarToken($idReserva, $fecha);
+
+            $bloques[] = [
+                'horario' => $detalle['horario'],
+                'hora_inicio' => $detalle['hora_inicio'],
+                'hora_fin' => $detalle['hora_fin'],
+                'urlConfirmar' => "{$baseUrl}/api/reservas/{$idReserva}/confirmar/{$token}",
+                'urlCancelar' => "{$baseUrl}/api/reservas/{$idReserva}/cancelar/{$token}",
+            ];
+        }
+
+        if ($detalleComun === null || empty($bloques)) {
+            return;
+        }
+
+        $datosVista = [
+            'nombres' => $detalleComun['nombres'],
+            'apellidos' => $detalleComun['apellidos'],
+            'fecha' => $detalleComun['fecha'],
+            'laboratorio' => $detalleComun['laboratorio'],
+            'curso' => $detalleComun['curso'],
+            'motivo' => $detalleComun['motivo'],
+            'bloques' => $bloques,
+        ];
+
+        $html = View::render('emails.reserva_creada_multiple_html', $datosVista, null);
+        $texto = View::render('emails.reserva_creada_multiple_texto', $datosVista, null);
+
+        $this->notificacion->enviarHtml(
+            $detalleComun['correo'],
+            'Confirma tus reservas de laboratorio - ReservaLab',
+            $html,
+            $texto
+        );
     }
 
     /**
