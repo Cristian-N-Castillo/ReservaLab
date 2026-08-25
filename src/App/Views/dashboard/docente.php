@@ -217,6 +217,7 @@ function horaDashboardDocente(?string $hora): string
                                 <th>Curso</th>
                                 <th>Estado</th>
                                 <th class="text-center">Observaciones</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
 
@@ -268,6 +269,51 @@ function horaDashboardDocente(?string $hora): string
                                             title="Ver observaciones">
                                             <i class="bi bi-journal-text"></i>
                                         </a>
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <?php if ($estado === 'pendiente'): ?>
+
+                                            <form
+                                                method="POST"
+                                                action="/reservas/<?= (int) $reserva['id_reserva'] ?>/confirmar"
+                                                class="d-inline">
+
+                                                <?= \Core\Csrf::field() ?>
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-success"
+                                                    title="Confirmar reserva">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+
+                                            </form>
+
+                                            <form
+                                                method="POST"
+                                                action="/reservas/<?= (int) $reserva['id_reserva'] ?>/cancelar"
+                                                class="d-inline"
+                                                onsubmit="return confirm('¿Cancelar esta reserva?');">
+
+                                                <?= \Core\Csrf::field() ?>
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-danger"
+                                                    title="Cancelar reserva">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+
+                                            </form>
+
+                                        <?php else: ?>
+
+                                            <span class="text-muted">&mdash;</span>
+
+                                        <?php endif; ?>
+
                                     </td>
 
                                 </tr>
