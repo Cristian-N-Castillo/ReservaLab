@@ -488,6 +488,43 @@ final class ReservaService
     }
 
     /**
+     * Marca como Finalizada toda reserva Pendiente o Confirmada
+     * cuyo bloque horario ya haya terminado.
+     *
+     * Pensado para ejecutarse periódicamente desde un cron
+     * (ver console reservas:finalizar).
+     *
+     * Retorna la cantidad de reservas finalizadas.
+     */
+    public function finalizarVencidas(): int
+    {
+        date_default_timezone_set('America/Santiago');
+
+        $estadoFinalizada = $this->estadoRepository->findByNombre('Finalizada');
+
+        if ($estadoFinalizada === null) {
+            throw new RuntimeException(
+                'No se encuentra configurado el estado Finalizada.'
+            );
+        }
+
+        if (!(bool) $estadoFinalizada['activo']) {
+            throw new RuntimeException(
+                'El estado Finalizada se encuentra inactivo.'
+            );
+        }
+
+        $hoy = (new DateTimeImmutable('today'))->format('Y-m-d');
+        $horaActual = (new DateTimeImmutable('now'))->format('H:i:s');
+
+        return $this->repository->finalizarVencidas(
+            (int) $estadoFinalizada['id_estado'],
+            $hoy,
+            $horaActual
+        );
+    }
+
+    /**
      * Envía un correo de recordatorio a las reservas que llevan más
      * de $minutos minutos en estado Pendiente, sin confirmar ni
      * cancelar. Cada reserva recibe el recordatorio una sola vez.

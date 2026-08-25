@@ -22,12 +22,17 @@ switch ($command) {
         require __DIR__ . '/src/console/enviar_recordatorios.php';
         break;
 
+    case 'reservas:finalizar':
+        require __DIR__ . '/src/console/finalizar_reservas.php';
+        break;
+
     default:
         echo PHP_EOL;
         echo "ReservaLab Console\n";
         echo "==================\n\n";
         echo "Comandos disponibles:\n\n";
         echo "  php console create:admin\n";
-        echo "  php console reservas:recordatorios [minutos=5]\n\n";
+        echo "  php console reservas:recordatorios [minutos=5]\n";
+        echo "  php console reservas:finalizar\n\n";
         break;
 }

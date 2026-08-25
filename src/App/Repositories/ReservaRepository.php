@@ -210,6 +210,43 @@ final class ReservaRepository extends Repository
     }
 
     /**
+     * Marca como Finalizada toda reserva Pendiente o Confirmada
+     * cuyo bloque horario ya haya terminado (fecha pasada, o fecha
+     * de hoy con hora_fin ya cumplida). Las canceladas no se tocan.
+     *
+     * Retorna la cantidad de reservas finalizadas.
+     */
+    public function finalizarVencidas(
+        int $idEstadoFinalizada,
+        string $hoy,
+        string $horaActual
+    ): int {
+        $sql = "
+            UPDATE reservas r
+            SET id_estado = :id_estado_finalizada,
+                updated_at = CURRENT_TIMESTAMP
+            FROM horarios h, estados_reserva er
+            WHERE r.id_horario = h.id_horario
+              AND r.id_estado = er.id_estado
+              AND LOWER(er.nombre) IN ('pendiente', 'confirmada')
+              AND (
+                    r.fecha < :hoy
+                    OR (r.fecha = :hoy AND h.hora_fin <= :hora_actual)
+                  )
+        ";
+
+        $statement = $this->db->prepare($sql);
+
+        $statement->execute([
+            'id_estado_finalizada' => $idEstadoFinalizada,
+            'hoy' => $hoy,
+            'hora_actual' => $horaActual,
+        ]);
+
+        return $statement->rowCount();
+    }
+
+    /**
      * Invalida el token de confirmación de una reserva
      * (se usa tras confirmarla o cancelarla, para que el
      * enlace del correo no pueda reutilizarse).
@@ -305,7 +342,7 @@ final class ReservaRepository extends Repository
                 ON er.id_estado = r.id_estado
 
             WHERE r.fecha >= CURRENT_DATE
-              AND LOWER(er.nombre) <> 'cancelada'
+              AND LOWER(er.nombre) NOT IN ('cancelada', 'finalizada')
 
             ORDER BY
                 r.fecha ASC,
@@ -418,7 +455,7 @@ final class ReservaRepository extends Repository
 
             WHERE r.id_laboratorio = :id_laboratorio
               AND r.fecha >= CURRENT_DATE
-              AND LOWER(er.nombre) <> 'cancelada'
+              AND LOWER(er.nombre) NOT IN ('cancelada', 'finalizada')
 
             ORDER BY
                 r.fecha ASC,
