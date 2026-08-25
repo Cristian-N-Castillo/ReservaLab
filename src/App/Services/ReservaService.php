@@ -12,6 +12,7 @@ use App\Repositories\LaboratorioRepository;
 use App\Repositories\ReservaRepository;
 use App\Repositories\UsuarioRepository;
 use Core\Config;
+use Core\Database;
 use Core\View;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -23,6 +24,12 @@ final class ReservaService
      * Máximo de días de anticipación permitidos para reservar.
      */
     private const DIAS_MAXIMOS_ANTICIPACION = 21;
+
+    /**
+     * Máximo de bloques horarios que se pueden reservar juntos
+     * en una sola operación (ver crearMultiple()).
+     */
+    private const MAX_BLOQUES_POR_RESERVA = 3;
 
     private ReservaRepository $repository;
     private EstadoReservaRepository $estadoRepository;
@@ -108,6 +115,112 @@ final class ReservaService
         string $fecha,
         string $motivo
     ): void {
+
+        $fecha = trim($fecha);
+
+        $idReserva = $this->crearSinNotificar(
+            $idUsuario,
+            $idCurso,
+            $idLaboratorio,
+            $idHorario,
+            $fecha,
+            $motivo
+        );
+
+        $this->notificarReservaCreada($idReserva, $fecha);
+    }
+
+    /**
+     * Crea hasta self::MAX_BLOQUES_POR_RESERVA reservas (una por cada
+     * bloque horario indicado) en una sola operación, para que el
+     * docente no tenga que repetir el formulario bloque por bloque.
+     *
+     * Todo o nada: si algún bloque no es válido o ya no está
+     * disponible, no se crea ninguna reserva.
+     */
+    public function crearMultiple(
+        int $idUsuario,
+        int $idCurso,
+        int $idLaboratorio,
+        array $idsHorario,
+        string $fecha,
+        string $motivo
+    ): void {
+
+        $fecha = trim($fecha);
+
+        $idsHorario = array_values(array_unique(array_map(
+            'intval',
+            $idsHorario
+        )));
+
+        if (empty($idsHorario)) {
+            throw new InvalidArgumentException(
+                'Debe seleccionar al menos un bloque horario.'
+            );
+        }
+
+        if (count($idsHorario) > self::MAX_BLOQUES_POR_RESERVA) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'No se pueden reservar más de %d bloques a la vez.',
+                    self::MAX_BLOQUES_POR_RESERVA
+                )
+            );
+        }
+
+        $conexion = Database::connection();
+
+        $conexion->beginTransaction();
+
+        try {
+
+            $idsReserva = [];
+
+            foreach ($idsHorario as $idHorario) {
+
+                $idsReserva[] = $this->crearSinNotificar(
+                    $idUsuario,
+                    $idCurso,
+                    $idLaboratorio,
+                    $idHorario,
+                    $fecha,
+                    $motivo
+                );
+            }
+
+            $conexion->commit();
+
+        } catch (\Throwable $excepcion) {
+
+            $conexion->rollBack();
+
+            throw $excepcion;
+        }
+
+        /*
+         * Los correos se envían recién después del commit: un fallo
+         * al enviar no debe revertir reservas ya guardadas.
+         */
+        foreach ($idsReserva as $idReserva) {
+            $this->notificarReservaCreada($idReserva, $fecha);
+        }
+    }
+
+    /**
+     * Valida y guarda una reserva, sin enviar el correo de
+     * confirmación. Utilizado tanto por crear() como por
+     * crearMultiple() para reutilizar exactamente las mismas
+     * validaciones.
+     */
+    private function crearSinNotificar(
+        int $idUsuario,
+        int $idCurso,
+        int $idLaboratorio,
+        int $idHorario,
+        string $fecha,
+        string $motivo
+    ): int {
 
         /*
          * =========================================================
@@ -373,18 +486,19 @@ final class ReservaService
          * =========================================================
          */
 
-        $idReserva = $this->repository->create($reserva);
+        return $this->repository->create($reserva);
+    }
 
-        /*
-         * =========================================================
-         * TOKEN DE CONFIRMACIÓN Y CORREO AL DOCENTE
-         * =========================================================
-         *
-         * Un fallo al enviar el correo no debe revertir ni afectar
-         * la reserva ya guardada (NotificacionService registra el
-         * error en storage/logs/mail.log en vez de lanzar excepción).
-         */
-
+    /**
+     * Genera el token de confirmación y envía el correo al docente
+     * para una reserva ya guardada.
+     *
+     * Un fallo al enviar el correo no debe revertir ni afectar la
+     * reserva ya guardada (NotificacionService registra el error en
+     * storage/logs/mail.log en vez de lanzar excepción).
+     */
+    private function notificarReservaCreada(int $idReserva, string $fecha): void
+    {
         $token = $this->repository->generarToken($idReserva, $fecha);
 
         $this->enviarCorreoConfirmacion($idReserva, $token);

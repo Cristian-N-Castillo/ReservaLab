@@ -260,9 +260,9 @@ final class ReservaController extends Controller
                 0
             );
 
-            $idHorario = (int) $request->input(
-                'id_horario',
-                0
+            $idsHorario = array_map(
+                'intval',
+                (array) $request->input('id_horario', [])
             );
 
             $motivo = trim(
@@ -273,20 +273,26 @@ final class ReservaController extends Controller
             );
 
             /*
-             * Crear reserva.
+             * Crear reserva(s). El docente puede seleccionar hasta
+             * varios bloques a la vez (ver ReservaService::crearMultiple).
              */
-            $this->reservaService->crear(
+            $this->reservaService->crearMultiple(
                 idUsuario: $idUsuario,
                 idCurso: $idCurso,
                 idLaboratorio: $idLaboratorio,
-                idHorario: $idHorario,
+                idsHorario: $idsHorario,
                 fecha: $fecha,
                 motivo: $motivo
             );
 
             Session::flash(
                 'success',
-                'La reserva fue creada correctamente.'
+                count($idsHorario) > 1
+                    ? sprintf(
+                        'Se crearon %d reservas correctamente.',
+                        count($idsHorario)
+                    )
+                    : 'La reserva fue creada correctamente.'
             );
 
         } catch (InvalidArgumentException $exception) {

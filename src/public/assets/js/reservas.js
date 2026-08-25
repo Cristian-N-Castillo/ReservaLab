@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'id_laboratorio'
     );
 
-    const inputHorario = document.getElementById('id_horario');
+    const idsHorarioContainer = document.getElementById(
+        'idsHorarioContainer'
+    );
 
     const bloqueSeleccionado = document.getElementById(
         'bloqueSeleccionado'
@@ -37,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         !formulario ||
         !inputFecha ||
         !selectLaboratorio ||
-        !inputHorario ||
+        !idsHorarioContainer ||
         !bloqueSeleccionado ||
         !botonReservar
     ) {
@@ -155,9 +157,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
      * =========================================================
-     * SELECCIÓN DE BLOQUE
+     * SELECCIÓN DE BLOQUES (hasta 3, en cualquier orden)
      * =========================================================
      */
+
+    const MAX_BLOQUES = 3;
+
+    const idsSeleccionados = new Set();
+
+    const actualizarBotonBloque = (boton, seleccionado) => {
+
+        boton.classList.toggle('btn-success', seleccionado);
+        boton.classList.toggle('btn-outline-success', !seleccionado);
+
+        boton.innerHTML = seleccionado
+            ? `<i class="bi bi-check-circle-fill me-2"></i> Seleccionado`
+            : `<i class="bi bi-check2-circle me-2"></i> Seleccionar`;
+    };
+
+    const actualizarResumenBloques = () => {
+
+        /*
+         * Reconstruimos los inputs ocultos y el resumen siguiendo
+         * el orden cronológico de los bloques (orden del DOM), sin
+         * importar el orden en que el docente los haya clickeado.
+         */
+        const bloquesSeleccionados = Array.from(botonesBloque).filter(
+            (boton) => idsSeleccionados.has(boton.dataset.id)
+        );
+
+        idsHorarioContainer.innerHTML = '';
+
+        bloquesSeleccionados.forEach((boton) => {
+
+            const input = document.createElement('input');
+
+            input.type = 'hidden';
+            input.name = 'id_horario[]';
+            input.value = boton.dataset.id;
+
+            idsHorarioContainer.appendChild(input);
+        });
+
+        if (bloquesSeleccionados.length === 0) {
+
+            bloqueSeleccionado.classList.remove(
+                'alert-success',
+                'alert-danger'
+            );
+
+            bloqueSeleccionado.classList.add('alert-secondary');
+
+            bloqueSeleccionado.innerHTML = `
+                <i class="bi bi-clock me-2"></i>
+                Aún no ha seleccionado ningún bloque horario.
+            `;
+
+            botonReservar.disabled = true;
+
+            return;
+        }
+
+        bloqueSeleccionado.classList.remove(
+            'alert-secondary',
+            'alert-danger'
+        );
+
+        bloqueSeleccionado.classList.add('alert-success');
+
+        bloqueSeleccionado.innerHTML = bloquesSeleccionados
+            .map((boton) => `
+                <div>
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong>${boton.dataset.nombre}</strong>
+                    &nbsp;
+                    ${boton.dataset.inicio} - ${boton.dataset.fin}
+                </div>
+            `)
+            .join('');
+
+        botonReservar.disabled = false;
+    };
 
     botonesBloque.forEach((boton) => {
 
@@ -165,87 +245,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const id = boton.dataset.id;
 
-            const nombre = boton.dataset.nombre;
+            if (idsSeleccionados.has(id)) {
 
-            const inicio = boton.dataset.inicio;
+                idsSeleccionados.delete(id);
 
-            const fin = boton.dataset.fin;
+                actualizarBotonBloque(boton, false);
 
+                actualizarResumenBloques();
 
-            /*
-             * Guardamos el ID real del horario.
-             */
-            inputHorario.value = id;
+                return;
+            }
 
+            if (idsSeleccionados.size >= MAX_BLOQUES) {
 
-            /*
-             * Restauramos todos los botones disponibles.
-             */
-            botonesBloque.forEach((otroBoton) => {
-
-                otroBoton.classList.remove(
-                    'btn-success'
+                alert(
+                    `Solo puede seleccionar hasta ${MAX_BLOQUES} bloques ` +
+                    'por reserva.'
                 );
 
-                otroBoton.classList.add(
-                    'btn-outline-success'
-                );
+                return;
+            }
 
-                otroBoton.innerHTML = `
-                    <i class="bi bi-check2-circle me-2"></i>
-                    Seleccionar
-                `;
+            idsSeleccionados.add(id);
 
-            });
+            actualizarBotonBloque(boton, true);
 
-
-            /*
-             * Marcamos el bloque seleccionado.
-             */
-            boton.classList.remove(
-                'btn-outline-success'
-            );
-
-            boton.classList.add(
-                'btn-success'
-            );
-
-            boton.innerHTML = `
-                <i class="bi bi-check-circle-fill me-2"></i>
-                Seleccionado
-            `;
-
-
-            /*
-             * Mostramos el bloque seleccionado.
-             */
-            bloqueSeleccionado.classList.remove(
-                'alert-secondary',
-                'alert-danger'
-            );
-
-            bloqueSeleccionado.classList.add(
-                'alert-success'
-            );
-
-            bloqueSeleccionado.innerHTML = `
-                <i class="bi bi-check-circle-fill me-2"></i>
-
-                <strong>
-                    ${nombre}
-                </strong>
-
-                &nbsp;
-
-                ${inicio} - ${fin}
-            `;
-
-
-            /*
-             * Habilitamos el botón de reserva.
-             */
-            botonReservar.disabled = false;
-
+            actualizarResumenBloques();
         });
 
     });
@@ -261,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'submit',
         (event) => {
 
-            if (!inputHorario.value) {
+            if (idsSeleccionados.size === 0) {
 
                 event.preventDefault();
 
@@ -276,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 bloqueSeleccionado.innerHTML = `
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    Debe seleccionar un bloque horario.
+                    Debe seleccionar al menos un bloque horario.
                 `;
 
                 botonReservar.disabled = true;

@@ -37,8 +37,8 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
             <p class="text-muted mb-0">
 
-                Seleccione una fecha, laboratorio, curso y bloque horario
-                para realizar una reserva.
+                Seleccione una fecha, laboratorio, curso y hasta 3 bloques
+                horarios para realizar una reserva.
 
             </p>
 
@@ -217,12 +217,12 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
                         </div>
 
 
-                        <!-- Bloque seleccionado -->
+                        <!-- Bloques seleccionados -->
                         <div class="mb-3">
 
                             <label class="form-label fw-semibold">
 
-                                Bloque seleccionado
+                                Bloques seleccionados (máx. 3)
 
                             </label>
 
@@ -232,15 +232,11 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
 
                                 <i class="bi bi-clock me-2"></i>
 
-                                Aún no ha seleccionado un bloque horario.
+                                Aún no ha seleccionado ningún bloque horario.
 
                             </div>
 
-                            <input
-                                type="hidden"
-                                name="id_horario"
-                                id="id_horario"
-                                value="">
+                            <div id="idsHorarioContainer"></div>
 
                         </div>
 
