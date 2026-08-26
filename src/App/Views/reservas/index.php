@@ -876,6 +876,25 @@ $usuarioActual = (int) Session::get('usuario_id', 0);
         transform-origin: top left;
         font-size: 13px;
     }
+
+    /* Flatpickr trae su propio tema (azul) independiente de
+       Bootstrap; se sobreescribe el color del día seleccionado
+       para que coincida con el verde institucional. */
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover {
+        background: #1B6B3B;
+        border-color: #1B6B3B;
+    }
 </style>
 
 <!-- JavaScript específico del módulo Reservas -->

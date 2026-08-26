@@ -28,7 +28,7 @@ declare(strict_types=1);
 <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);max-width:480px;">
 
 <tr>
-<td style="background-color:#0d6efd;padding:20px 24px;">
+<td style="background-color:#1B6B3B;padding:20px 24px;">
 <span style="color:#ffffff;font-size:18px;font-weight:bold;">ReservaLab</span>
 </td>
 </tr>

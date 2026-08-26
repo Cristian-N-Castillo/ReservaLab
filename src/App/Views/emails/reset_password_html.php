@@ -24,7 +24,7 @@ declare(strict_types=1);
 <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);max-width:480px;">
 
 <tr>
-<td style="background-color:#0d6efd;padding:20px 24px;">
+<td style="background-color:#1B6B3B;padding:20px 24px;">
 <span style="color:#ffffff;font-size:18px;font-weight:bold;">ReservaLab</span>
 </td>
 </tr>
@@ -43,7 +43,7 @@ Recibimos una solicitud para restablecer tu contraseña. Usa el siguiente códig
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa;border-radius:6px;margin-bottom:20px;">
 <tr>
 <td style="padding:20px;text-align:center;">
-<span style="font-size:32px;font-weight:bold;letter-spacing:8px;color:#0d6efd;"><?= htmlspecialchars($codigo) ?></span>
+<span style="font-size:32px;font-weight:bold;letter-spacing:8px;color:#1B6B3B;"><?= htmlspecialchars($codigo) ?></span>
 </td>
 </tr>
 </table>
