@@ -329,34 +329,4 @@ final class ReservaController extends Controller
             '/reservas?' . $query
         );
     }
-
-    /**
-     * Confirma una reserva propia desde el Dashboard (alternativa
-     * al enlace del correo, para cuando ese enlace no es accesible
-     * desde fuera de la red del establecimiento).
-     */
-    public function confirmar(int $id): never
-    {
-        $idUsuario = (int) Session::get('usuario_id', 0);
-
-        $this->ejecutarConFlash(
-            fn () => $this->reservaService->confirmarComoDocente($id, $idUsuario),
-            'La reserva fue confirmada correctamente.',
-            '/dashboard'
-        );
-    }
-
-    /**
-     * Cancela una reserva propia desde el Dashboard.
-     */
-    public function cancelar(int $id): never
-    {
-        $idUsuario = (int) Session::get('usuario_id', 0);
-
-        $this->ejecutarConFlash(
-            fn () => $this->reservaService->cancelarComoDocente($id, $idUsuario),
-            'La reserva fue cancelada correctamente.',
-            '/dashboard'
-        );
-    }
 }

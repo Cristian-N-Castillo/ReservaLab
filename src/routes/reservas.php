@@ -25,15 +25,3 @@ $router->post(
     [ReservaController::class, 'store'],
     [AuthMiddleware::class, CsrfMiddleware::class]
 );
-
-$router->post(
-    '/reservas/{id}/confirmar',
-    [ReservaController::class, 'confirmar'],
-    [AuthMiddleware::class, CsrfMiddleware::class]
-);
-
-$router->post(
-    '/reservas/{id}/cancelar',
-    [ReservaController::class, 'cancelar'],
-    [AuthMiddleware::class, CsrfMiddleware::class]
-);

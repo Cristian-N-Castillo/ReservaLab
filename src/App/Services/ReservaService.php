@@ -597,65 +597,6 @@ final class ReservaService
     }
 
     /**
-     * Confirma una reserva propia desde el panel del docente
-     * (requiere sesión iniciada). Alternativa al enlace del correo,
-     * pensada para cuando ese enlace no es accesible desde fuera de
-     * la red del establecimiento.
-     */
-    public function confirmarComoDocente(int $idReserva, int $idUsuario): void
-    {
-        $this->autorizarAccionDocente($idReserva, $idUsuario);
-
-        $this->cambiarEstadoPorNombre($idReserva, 'Confirmada');
-
-        $this->enviarCorreoConfirmacionAdmins($idReserva);
-    }
-
-    /**
-     * Cancela una reserva propia desde el panel del docente
-     * (requiere sesión iniciada). Alternativa al enlace del correo.
-     */
-    public function cancelarComoDocente(int $idReserva, int $idUsuario): void
-    {
-        $this->autorizarAccionDocente($idReserva, $idUsuario);
-
-        $this->cambiarEstadoPorNombre($idReserva, 'Cancelada');
-    }
-
-    /**
-     * Verifica que la reserva exista, pertenezca al docente
-     * autenticado y siga Pendiente, antes de confirmarla o
-     * cancelarla desde el panel (sin token de correo).
-     */
-    private function autorizarAccionDocente(int $idReserva, int $idUsuario): void
-    {
-        $reserva = $this->repository->findById($idReserva);
-
-        if ($reserva === null) {
-            throw new InvalidArgumentException(
-                'La reserva no existe.'
-            );
-        }
-
-        if ($reserva->id_usuario !== $idUsuario) {
-            throw new InvalidArgumentException(
-                'No tiene permiso para modificar esta reserva.'
-            );
-        }
-
-        $estadoPendiente = $this->estadoRepository->findByNombre('Pendiente');
-
-        if (
-            $estadoPendiente === null ||
-            $reserva->id_estado !== (int) $estadoPendiente['id_estado']
-        ) {
-            throw new InvalidArgumentException(
-                'Esta reserva ya fue procesada anteriormente.'
-            );
-        }
-    }
-
-    /**
      * Valida que el token recibido corresponda a la reserva indicada,
      * que no haya expirado y que la reserva siga Pendiente.
      */
