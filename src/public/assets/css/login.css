@@ -1,6 +1,6 @@
 body{
 
-    background:linear-gradient(135deg,#1B6B3B,#3FA066);
+    background:linear-gradient(135deg,#1B6B3B,#8DC63F);
 
     font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
 
@@ -9,6 +9,23 @@ body{
 .login-card{
 
     border-radius:22px;
+    position:relative;
+
+}
+
+/* Detalle decorativo: hace guiño al arcoíris del logo de SNA Educa,
+   que junto al verde institucional del liceo forma la identidad
+   visual combinada del sistema. */
+.login-card::before{
+
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:6px;
+    background:linear-gradient(90deg,#6B3FA0,#F5A623,#FFD54F);
+    z-index:1;
 
 }
 
