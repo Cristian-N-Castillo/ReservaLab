@@ -1,0 +1,55 @@
+/* ==========================================
+   Colores corporativos del Liceo El Huerton
+   ==========================================
+   Sobreescribe las variables de Bootstrap para que
+   bg-primary/btn-primary/text-primary/etc. usen el verde del
+   liceo en vez del azul por defecto. Cargado por ambos layouts
+   (app y auth) para que el color de marca sea consistente en
+   todo el sistema, incluyendo la pantalla de login. */
+
+:root {
+    --bs-primary: #1B6B3B;
+    --bs-primary-rgb: 27, 107, 59;
+    --bs-link-color: #1B6B3B;
+    --bs-link-color-rgb: 27, 107, 59;
+    --bs-link-hover-color: #124D2A;
+    --bs-link-hover-color-rgb: 18, 77, 42;
+    --bs-pagination-active-bg: #1B6B3B;
+    --bs-pagination-active-border-color: #1B6B3B;
+    --bs-focus-ring-color: rgba(27, 107, 59, .25);
+}
+
+.form-check-input:checked {
+    background-color: #1B6B3B;
+    border-color: #1B6B3B;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #1B6B3B;
+    --bs-btn-border-color: #1B6B3B;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #175c33;
+    --bs-btn-hover-border-color: #16572f;
+    --bs-btn-focus-shadow-rgb: 27, 107, 59;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #16572f;
+    --bs-btn-active-border-color: #14512c;
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #1B6B3B;
+    --bs-btn-disabled-border-color: #1B6B3B;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: #1B6B3B;
+    --bs-btn-border-color: #1B6B3B;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #1B6B3B;
+    --bs-btn-hover-border-color: #1B6B3B;
+    --bs-btn-focus-shadow-rgb: 27, 107, 59;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #1B6B3B;
+    --bs-btn-active-border-color: #1B6B3B;
+    --bs-btn-disabled-color: #1B6B3B;
+    --bs-btn-disabled-border-color: #1B6B3B;
+}

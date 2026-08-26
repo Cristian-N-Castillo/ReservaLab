@@ -77,11 +77,11 @@ body {
 
 .sidebar .nav-link:hover {
     background: #e9ecef;
-    color: #0d6efd;
+    color: #1B6B3B;
 }
 
 .sidebar .nav-link.active {
-    background: #0d6efd;
+    background: #1B6B3B;
     color: white;
     font-weight: 600;
 }
@@ -124,7 +124,7 @@ body {
 }
 
 .btn-primary {
-    box-shadow: 0 3px 8px rgba(13,110,253,.25);
+    box-shadow: 0 3px 8px rgba(27,107,59,.25);
 }
 
 /* ==========================
@@ -138,7 +138,7 @@ body {
 
 .form-control:focus,
 .form-select:focus {
-    box-shadow: 0 0 0 .20rem rgba(13,110,253,.15);
+    box-shadow: 0 0 0 .20rem rgba(27,107,59,.15);
 }
 
 /* ==========================
@@ -202,14 +202,14 @@ footer {
 }
 
 .sidebar-menu .nav-link:hover{
-    background:#edf4ff;
-    color:#0d6efd;
+    background:#e6f4ea;
+    color:#1B6B3B;
 }
 
 .sidebar-menu .nav-link.active{
-    background:#0d6efd;
+    background:#1B6B3B;
     color:#fff;
-    box-shadow:0 8px 18px rgba(13,110,253,.18);
+    box-shadow:0 8px 18px rgba(27,107,59,.18);
 }
 
 .sidebar-menu .nav-link.disabled{
@@ -351,11 +351,11 @@ h5 { font-size: 1rem; }
 }
 
 .calendario-dia-hoy {
-    background: #eef5ff;
+    background: #e6f4ea;
 }
 
 .calendario-dia-hoy .calendario-numero {
-    background: #0d6efd;
+    background: #1B6B3B;
     color: #fff;
     border-radius: 50%;
 }

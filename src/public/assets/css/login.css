@@ -1,6 +1,6 @@
 body{
 
-    background:linear-gradient(135deg,#0d6efd,#5ca9ff);
+    background:linear-gradient(135deg,#1B6B3B,#3FA066);
 
     font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
 
@@ -14,7 +14,7 @@ body{
 
 .login-left{
 
-    background:linear-gradient(160deg,#0d6efd,#0056d6);
+    background:linear-gradient(160deg,#1B6B3B,#124D2A);
 
     color:white;
 
@@ -40,7 +40,7 @@ body{
 
     font-size:80px;
 
-    color:#0d6efd;
+    color:#1B6B3B;
 
 }
 
@@ -64,13 +64,13 @@ body{
 
     box-shadow:none;
 
-    border-color:#86b7fe;
+    border-color:#8fcba4;
 
 }
 
 .input-group:focus-within{
 
-    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+    box-shadow:0 0 0 .2rem rgba(27,107,59,.15);
 
     border-radius:.5rem;
 

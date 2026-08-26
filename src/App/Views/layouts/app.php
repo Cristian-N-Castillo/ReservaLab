@@ -23,6 +23,9 @@ declare(strict_types=1);
         rel="stylesheet">
 
     <link
+        href="<?= \Core\Asset::url('/assets/css/brand.css') ?>"
+        rel="stylesheet">
+    <link
         href="<?= \Core\Asset::url('/assets/css/app.css') ?>"
         rel="stylesheet">
     <link href="<?= \Core\Asset::url('/assets/css/dashboard.css') ?>" rel="stylesheet">
