@@ -32,7 +32,7 @@ $avatar = (string) Session::get('avatar', '');
             <a class="navbar-brand fw-bold d-none d-lg-flex align-items-center mb-0" href="/dashboard">
 
                 <img
-                    src="<?= \Core\Asset::url('/assets/img/logo-huerton.png') ?>"
+                    src="<?= \Core\Asset::url('/assets/img/logo-sna-huerton.png') ?>"
                     alt="Liceo El Huerton"
                     class="navbar-logo me-2">
 

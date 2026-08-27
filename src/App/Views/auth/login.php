@@ -25,7 +25,7 @@ use Core\Session;
                             <div class="w-100 text-center">
 
                                 <img
-                                    src="<?= \Core\Asset::url('/assets/img/logo-huerton.png') ?>"
+                                    src="<?= \Core\Asset::url('/assets/img/logo-sna-huerton.png') ?>"
                                     alt="Liceo El Huerton"
                                     class="login-logo mb-4">
 

@@ -52,7 +52,7 @@ declare(strict_types=1);
                 <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="sidebarOffcanvasLabel">
 
                     <img
-                        src="<?= \Core\Asset::url('/assets/img/logo-huerton.png') ?>"
+                        src="<?= \Core\Asset::url('/assets/img/logo-sna-huerton.png') ?>"
                         alt="Liceo El Huerton"
                         class="navbar-logo me-2">
 
