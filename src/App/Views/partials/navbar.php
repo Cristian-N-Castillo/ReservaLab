@@ -31,7 +31,10 @@ $avatar = (string) Session::get('avatar', '');
 
             <a class="navbar-brand fw-bold d-none d-lg-flex align-items-center mb-0" href="/dashboard">
 
-                <i class="bi bi-pc-display-horizontal fs-4 me-2"></i>
+                <img
+                    src="<?= \Core\Asset::url('/assets/img/logo-huerton.png') ?>"
+                    alt="Liceo El Huerton"
+                    class="navbar-logo me-2">
 
                 ReservaLab
 

@@ -51,7 +51,10 @@ declare(strict_types=1);
 
                 <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="sidebarOffcanvasLabel">
 
-                    <i class="bi bi-pc-display-horizontal fs-4 me-2 text-primary"></i>
+                    <img
+                        src="<?= \Core\Asset::url('/assets/img/logo-huerton.png') ?>"
+                        alt="Liceo El Huerton"
+                        class="navbar-logo me-2">
 
                     ReservaLab
 

@@ -24,7 +24,10 @@ use Core\Session;
 
                             <div class="w-100 text-center">
 
-                                <i class="bi bi-pc-display display-1 mb-4"></i>
+                                <img
+                                    src="<?= \Core\Asset::url('/assets/img/logo-huerton.png') ?>"
+                                    alt="Liceo El Huerton"
+                                    class="login-logo mb-4">
 
                                 <h1 class="fw-bold mb-3">
 
