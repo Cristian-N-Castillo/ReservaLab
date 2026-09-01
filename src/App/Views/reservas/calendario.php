@@ -136,12 +136,13 @@ function claseEventoCalendario(array $reserva): string
                                         || $usuarioActual === (int) $reserva['id_usuario'];
 
                                     $tituloEvento = substr((string) $reserva['hora_inicio'], 0, 5)
+                                        . ' - ' . (string) $reserva['curso']
                                         . ' - ' . (string) $reserva['laboratorio']
                                         . ' - ' . trim($reserva['nombres'] . ' ' . $reserva['apellidos'])
                                         . ' (' . (string) $reserva['estado'] . ')';
 
                                     $textoEvento = htmlspecialchars(substr((string) $reserva['hora_inicio'], 0, 5))
-                                        . ' ' . htmlspecialchars((string) $reserva['laboratorio']);
+                                        . ' &middot; ' . htmlspecialchars((string) $reserva['curso']);
 
                                     $claseEvento = 'calendario-evento '
                                         . claseEventoCalendario($reserva);

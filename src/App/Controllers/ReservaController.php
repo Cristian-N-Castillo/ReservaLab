@@ -167,6 +167,23 @@ final class ReservaController extends Controller
             $reservasPorDia[$reserva['fecha']][] = $reserva;
         }
 
+        /*
+         * porRangoFechas() hereda el orden de historial() (más
+         * reciente primero, pensado para una lista de actividad),
+         * pero en el calendario cada día debe verse en orden
+         * cronológico normal: el primer bloque de la mañana arriba.
+         */
+        foreach ($reservasPorDia as &$reservasDelDia) {
+
+            usort(
+                $reservasDelDia,
+                static fn (array $a, array $b): int =>
+                    ((string) $a['hora_inicio']) <=> ((string) $b['hora_inicio'])
+            );
+        }
+
+        unset($reservasDelDia);
+
         $hoy = (new \DateTimeImmutable('today'))->format('Y-m-d');
 
         $semanas = [];
