@@ -18,6 +18,13 @@ final class UsuarioService
     private const RESET_INTENTOS_MAXIMO = 5;
 
     /**
+     * Claves de módulo válidas para el tutorial guiado de
+     * bienvenida (ver marcarTutorialVisto()). Agregar una nueva
+     * clave aquí habilita el tutorial de un módulo nuevo.
+     */
+    private const MODULOS_TUTORIAL = ['dashboard', 'reservas'];
+
+    /**
      * Avatares (emoji) que el usuario puede elegir para su cuenta,
      * agrupados por categoría para mostrarlos en el selector. No se
      * usan imágenes: los emoji se ven bien en cualquier dispositivo,
@@ -184,9 +191,37 @@ final class UsuarioService
     /**
      * Marca que el usuario ya vio el tutorial guiado de bienvenida.
      */
-    public function marcarTutorialVisto(int $id): void
+    /**
+     * Agrega $modulo a la lista de tutoriales guiados que el
+     * usuario ya vio (sin duplicar ni afectar los demás módulos ya
+     * marcados). Ignora silenciosamente módulos desconocidos o un
+     * usuario inexistente: esto se llama desde una petición AJAX
+     * de bajo riesgo, no vale la pena interrumpir al usuario por
+     * esto — en el peor caso, el tutorial se le muestra de nuevo.
+     */
+    public function marcarTutorialVisto(int $id, string $modulo): void
     {
-        $this->repository->marcarTutorialVisto($id);
+        $modulo = trim($modulo);
+
+        if (!in_array($modulo, self::MODULOS_TUTORIAL, true)) {
+            return;
+        }
+
+        $usuario = $this->repository->findById($id);
+
+        if (!$usuario) {
+            return;
+        }
+
+        $vistos = array_filter(explode(',', $usuario->tutoriales_vistos));
+
+        if (in_array($modulo, $vistos, true)) {
+            return;
+        }
+
+        $vistos[] = $modulo;
+
+        $this->repository->actualizarTutorialesVistos($id, implode(',', $vistos));
     }
 
     /**

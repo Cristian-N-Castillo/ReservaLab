@@ -19,7 +19,7 @@ final class Usuario
         public string $avatar = '',
         public bool $activo = true,
         public bool $debe_cambiar_password = true,
-        public bool $tutorial_visto = false,
+        public string $tutoriales_vistos = '',
         public ?string $ultimo_login = null,
         public ?string $created_at = null,
         public ?string $updated_at = null

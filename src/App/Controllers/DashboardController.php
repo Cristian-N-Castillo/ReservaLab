@@ -115,7 +115,11 @@ final class DashboardController extends Controller
                 'totalReservas' => count($historial),
                 'totalProximas' => count($proximas),
                 'totalCanceladas' => count($canceladas),
-                'mostrarTutorial' => !(bool) Session::get('tutorial_visto', false),
+                'mostrarTutorial' => !in_array(
+                    'dashboard',
+                    Session::get('tutoriales_vistos', []),
+                    true
+                ),
             ]
         );
     }

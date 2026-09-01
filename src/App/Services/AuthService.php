@@ -77,8 +77,8 @@ final class AuthService
         );
 
         Session::set(
-            'tutorial_visto',
-            $usuario->tutorial_visto
+            'tutoriales_vistos',
+            array_filter(explode(',', $usuario->tutoriales_vistos))
         );
 
         return true;

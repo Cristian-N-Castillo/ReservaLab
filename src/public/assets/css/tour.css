@@ -1,0 +1,22 @@
+/* ==========================================
+   Tour guiado (Driver.js) - ReservaLab
+   ==========================================
+   El verde institucional en vez del morado por defecto de la
+   librería. Compartido por el tour de cualquier módulo.
+   ========================================== */
+
+.driver-popover-title,
+.driver-popover-progress-text {
+    color: #1B6B3B;
+}
+
+.driver-popover-next-btn,
+.driver-popover-close-btn {
+    background-color: #1B6B3B;
+    color: #fff;
+    text-shadow: none;
+}
+
+.driver-popover-prev-btn {
+    color: #1B6B3B;
+}

@@ -277,11 +277,15 @@ final class UsuarioRepository extends Repository
      * para que no se le vuelva a mostrar en próximos inicios de
      * sesión.
      */
-    public function marcarTutorialVisto(int $id): void
+    /**
+     * Guarda la lista completa (separada por comas) de módulos cuyo
+     * tutorial guiado ya vio el usuario.
+     */
+    public function actualizarTutorialesVistos(int $id, string $tutorialesVistos): void
     {
         $sql = "
             UPDATE usuarios
-            SET tutorial_visto = TRUE,
+            SET tutoriales_vistos = :tutoriales_vistos,
                 updated_at = NOW()
             WHERE id_usuario = :id
         ";
@@ -289,6 +293,7 @@ final class UsuarioRepository extends Repository
         $statement = $this->db->prepare($sql);
 
         $statement->execute([
+            'tutoriales_vistos' => $tutorialesVistos,
             'id' => $id
         ]);
     }
@@ -437,7 +442,7 @@ final class UsuarioRepository extends Repository
             avatar: $row['avatar'] ?? '',
             activo: (bool) $row['activo'],
             debe_cambiar_password: (bool) $row['debe_cambiar_password'],
-            tutorial_visto: (bool) ($row['tutorial_visto'] ?? false),
+            tutoriales_vistos: (string) ($row['tutoriales_vistos'] ?? ''),
             ultimo_login: $row['ultimo_login'],
             created_at: $row['created_at'],
             updated_at: $row['updated_at']
