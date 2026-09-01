@@ -79,7 +79,20 @@ final class DashboardController extends Controller
     {
         $idUsuario = (int) Session::get('usuario_id', 0);
 
-        $historial = $this->reservaService->historialPorUsuario($idUsuario);
+        /*
+         * El Dashboard del docente solo muestra el mes en curso (se
+         * "reinicia" visualmente cada mes). Esto no borra ni afecta
+         * los datos: el historial completo sigue existiendo en la
+         * base de datos, solo se filtra esta consulta puntual.
+         */
+        $primerDiaMes = date('Y-m-01');
+        $ultimoDiaMes = date('Y-m-t');
+
+        $historial = $this->reservaService->historialPorUsuario(
+            $idUsuario,
+            $primerDiaMes,
+            $ultimoDiaMes
+        );
 
         $hoy = date('Y-m-d');
 

@@ -102,7 +102,7 @@ function horaDashboardDocente(?string $hora): string
                         <div>
                             <div class="stat-label">Mis Reservas</div>
                             <div class="stat-number"><?= $totalReservas ?></div>
-                            <small class="text-secondary">Total histórico</small>
+                            <small class="text-secondary">Este mes</small>
                         </div>
 
                         <div class="stat-icon">
@@ -186,7 +186,7 @@ function horaDashboardDocente(?string $hora): string
 
         <div class="card-header">
             <i class="bi bi-clock-history me-1"></i>
-            Historial de Reservas
+            Historial de Reservas (este mes)
         </div>
 
         <div class="card-body p-0">
@@ -195,7 +195,7 @@ function horaDashboardDocente(?string $hora): string
 
                 <div class="empty-state py-5">
                     <i class="bi bi-calendar-x"></i>
-                    <h5>Aún no tiene reservas</h5>
+                    <h5>Aún no tiene reservas este mes</h5>
                     <p class="mb-3">Cuando realice una reserva aparecerá aquí.</p>
                     <a href="/reservas" class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-calendar-plus me-1"></i>

@@ -653,10 +653,16 @@ final class ReservaRepository extends Repository
     }
 
     /**
-     * Historial completo de reservas de un docente, más recientes primero.
+     * Historial de reservas de un docente, más recientes primero.
+     *
+     * $desde/$hasta son opcionales: si se omiten, trae el historial
+     * completo sin límite de fecha.
      */
-    public function historialPorUsuario(int $idUsuario): array
-    {
+    public function historialPorUsuario(
+        int $idUsuario,
+        ?string $desde = null,
+        ?string $hasta = null
+    ): array {
         $sql = "
             SELECT
                 r.id_reserva,
@@ -688,6 +694,8 @@ final class ReservaRepository extends Repository
                 ON er.id_estado = r.id_estado
 
             WHERE r.id_usuario = :id_usuario
+              AND (:desde::date IS NULL OR r.fecha >= :desde)
+              AND (:hasta::date IS NULL OR r.fecha <= :hasta)
 
             ORDER BY r.fecha DESC, h.hora_inicio DESC
         ";
@@ -695,7 +703,9 @@ final class ReservaRepository extends Repository
         $statement = $this->db->prepare($sql);
 
         $statement->execute([
-            'id_usuario' => $idUsuario
+            'id_usuario' => $idUsuario,
+            'desde' => $desde,
+            'hasta' => $hasta,
         ]);
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

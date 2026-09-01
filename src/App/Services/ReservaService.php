@@ -78,11 +78,15 @@ final class ReservaService
     }
 
     /**
-     * Historial completo de reservas de un docente.
+     * Historial de reservas de un docente. $desde/$hasta son
+     * opcionales: si se omiten, trae el historial completo.
      */
-    public function historialPorUsuario(int $idUsuario): array
-    {
-        return $this->repository->historialPorUsuario($idUsuario);
+    public function historialPorUsuario(
+        int $idUsuario,
+        ?string $desde = null,
+        ?string $hasta = null
+    ): array {
+        return $this->repository->historialPorUsuario($idUsuario, $desde, $hasta);
     }
 
     /**
