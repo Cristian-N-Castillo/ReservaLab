@@ -22,8 +22,13 @@ final class TutorialController extends Controller
      * Marca el tutorial guiado como visto, para que no se vuelva a
      * mostrar en próximos inicios de sesión. Se llama vía JS al
      * terminar o cerrar el recorrido.
+     *
+     * Termina con exit (como Response::redirect()): si no, el
+     * valor de retorno nulo de este método hace que Application::run()
+     * interprete que la ruta no encontró nada y envíe además una
+     * respuesta 404 detrás del JSON ya enviado.
      */
-    public function marcarVisto(): void
+    public function marcarVisto(): never
     {
         $idUsuario = (int) Session::get('usuario_id', 0);
 
@@ -35,5 +40,7 @@ final class TutorialController extends Controller
         }
 
         (new Response())->json(['ok' => true]);
+
+        exit;
     }
 }
