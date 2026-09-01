@@ -182,6 +182,14 @@ final class UsuarioService
     }
 
     /**
+     * Marca que el usuario ya vio el tutorial guiado de bienvenida.
+     */
+    public function marcarTutorialVisto(int $id): void
+    {
+        $this->repository->marcarTutorialVisto($id);
+    }
+
+    /**
      * Cambia la contraseña de un usuario (usado en el primer inicio
      * de sesión, cuando debe_cambiar_password está activo). No pide
      * la contraseña actual porque el usuario ya se autenticó con ella

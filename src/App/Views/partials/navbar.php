@@ -45,6 +45,7 @@ $avatar = (string) Session::get('avatar', '');
         <div class="dropdown">
 
             <button
+                id="tour-navbar-perfil"
                 class="btn btn-primary border-0 shadow-none dropdown-toggle d-flex align-items-center"
                 type="button"
                 data-bs-toggle="dropdown"

@@ -76,6 +76,11 @@ final class AuthService
             $usuario->avatar
         );
 
+        Session::set(
+            'tutorial_visto',
+            $usuario->tutorial_visto
+        );
+
         return true;
     }
 

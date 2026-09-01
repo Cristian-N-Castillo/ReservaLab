@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\DashboardController;
 use App\Controllers\PerfilController;
+use App\Controllers\TutorialController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\CsrfMiddleware;
 
@@ -13,6 +14,12 @@ $router->get(
     '/dashboard',
     [DashboardController::class, 'index'],
     [AuthMiddleware::class]
+);
+
+$router->post(
+    '/tutorial/visto',
+    [TutorialController::class, 'marcarVisto'],
+    [AuthMiddleware::class, CsrfMiddleware::class]
 );
 
 $router->get(

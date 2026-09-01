@@ -27,6 +27,7 @@ function active(string $route, string $current): string
         <li class="nav-item">
 
             <a
+                id="tour-nav-dashboard"
                 class="nav-link <?= active('/dashboard', $current) ?>"
                 href="/dashboard">
 
@@ -91,6 +92,7 @@ function active(string $route, string $current): string
         <li class="nav-item">
 
             <a
+                id="tour-nav-laboratorios"
                 class="nav-link <?= active('/laboratorios', $current) ?>"
                 href="/laboratorios">
 
@@ -106,6 +108,7 @@ function active(string $route, string $current): string
         <li class="nav-item">
 
             <a
+                id="tour-nav-reservas"
                 class="nav-link <?= active('/reservas', $current) ?>"
                 href="/reservas">
 

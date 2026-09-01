@@ -89,7 +89,7 @@ function horaDashboardDocente(?string $hora): string
     </div>
 
     <!-- Estadísticas -->
-    <div class="row g-4 mb-4">
+    <div id="tour-stats" class="row g-4 mb-4">
 
         <div class="col-12 col-sm-4">
 
@@ -174,7 +174,7 @@ function horaDashboardDocente(?string $hora): string
     <!-- Acceso rápido -->
     <div class="d-flex justify-content-end mb-3">
 
-        <a href="/reservas" class="btn btn-success">
+        <a id="tour-nueva-reserva" href="/reservas" class="btn btn-success">
             <i class="bi bi-calendar-plus me-1"></i>
             Nueva Reserva
         </a>
@@ -287,3 +287,39 @@ function horaDashboardDocente(?string $hora): string
     </div>
 
 </div>
+
+<?php if ($mostrarTutorial ?? false): ?>
+
+    <!-- Tour guiado de bienvenida (solo Docente, solo la primera vez) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+
+    <style>
+        /* El tour usa el verde institucional en vez del morado por defecto de Driver.js */
+        .driver-popover-title,
+        .driver-popover-progress-text {
+            color: #1B6B3B;
+        }
+
+        .driver-popover-next-btn,
+        .driver-popover-close-btn {
+            background-color: #1B6B3B;
+            color: #fff;
+            text-shadow: none;
+        }
+
+        .driver-popover-prev-btn {
+            color: #1B6B3B;
+        }
+    </style>
+
+    <script>
+        window.tutorialReservaLab = {
+            mostrar: true,
+            token: '<?= addslashes(\Core\Csrf::token()) ?>'
+        };
+    </script>
+
+    <script src="<?= \Core\Asset::url('/assets/js/tutorial.js') ?>"></script>
+
+<?php endif; ?>

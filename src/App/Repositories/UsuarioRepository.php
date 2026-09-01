@@ -273,6 +273,27 @@ final class UsuarioRepository extends Repository
     }
 
     /**
+     * Marca que el usuario ya vio el tutorial guiado de bienvenida,
+     * para que no se le vuelva a mostrar en próximos inicios de
+     * sesión.
+     */
+    public function marcarTutorialVisto(int $id): void
+    {
+        $sql = "
+            UPDATE usuarios
+            SET tutorial_visto = TRUE,
+                updated_at = NOW()
+            WHERE id_usuario = :id
+        ";
+
+        $statement = $this->db->prepare($sql);
+
+        $statement->execute([
+            'id' => $id
+        ]);
+    }
+
+    /**
      * Genera un código numérico de 6 dígitos para recuperar la
      * contraseña, válido por 15 minutos. Se guarda solo su hash
      * (nunca el código en texto plano) y se reinician los intentos.
@@ -416,6 +437,7 @@ final class UsuarioRepository extends Repository
             avatar: $row['avatar'] ?? '',
             activo: (bool) $row['activo'],
             debe_cambiar_password: (bool) $row['debe_cambiar_password'],
+            tutorial_visto: (bool) ($row['tutorial_visto'] ?? false),
             ultimo_login: $row['ultimo_login'],
             created_at: $row['created_at'],
             updated_at: $row['updated_at']
