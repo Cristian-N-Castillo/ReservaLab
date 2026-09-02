@@ -31,13 +31,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
      * Mascota (robot) que acompaña al cuadro de diálogo del tour,
-     * reposicionándose junto a él en cada paso. Un solo elemento
+     * reposicionándose junto a él en cada paso y saludando con el
+     * brazo cada vez que salta al siguiente. Un solo elemento SVG
      * compartido por todos los tours del sistema.
      */
     const mascota = document.createElement('div');
     mascota.className = 'tour-mascot';
-    mascota.textContent = '🤖';
+    mascota.innerHTML = `
+        <svg class="tm-svg" viewBox="0 0 80 110" xmlns="http://www.w3.org/2000/svg">
+            <ellipse class="tm-sombra" cx="40" cy="103" rx="18" ry="5"></ellipse>
+            <rect class="tm-pierna" x="27" y="80" width="9" height="20" rx="4"></rect>
+            <rect class="tm-pierna" x="44" y="80" width="9" height="20" rx="4"></rect>
+            <rect class="tm-cuerpo" x="17" y="42" width="46" height="42" rx="11"></rect>
+            <circle class="tm-pantalla" cx="40" cy="63" r="8"></circle>
+            <rect class="tm-brazo" x="5" y="46" width="10" height="27" rx="5"></rect>
+            <g class="tm-brazo-der-grupo">
+                <rect class="tm-brazo" x="65" y="46" width="10" height="27" rx="5"></rect>
+            </g>
+            <g class="tm-antena-grupo">
+                <line class="tm-antena" x1="40" y1="10" x2="40" y2="2"></line>
+                <circle class="tm-antena-bola" cx="40" cy="2" r="3"></circle>
+            </g>
+            <rect class="tm-cabeza" x="13" y="10" width="54" height="36" rx="14"></rect>
+            <circle class="tm-ojo" cx="28" cy="28" r="5"></circle>
+            <circle class="tm-ojo" cx="52" cy="28" r="5"></circle>
+            <rect class="tm-boca" x="30" y="38" width="20" height="3" rx="1.5"></rect>
+        </svg>
+    `;
     document.body.appendChild(mascota);
+
+    const saludarConElBrazo = () => {
+        const brazo = mascota.querySelector('.tm-brazo-der-grupo');
+
+        if (!brazo) {
+            return;
+        }
+
+        brazo.classList.remove('tm-saludando');
+        void brazo.offsetWidth;
+        brazo.classList.add('tm-saludando');
+    };
 
     const posicionarMascota = (popoverEl) => {
 
@@ -47,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const margen = 14;
         const rect = popoverEl.getBoundingClientRect();
-        const anchoMascota = mascota.offsetWidth || 64;
-        const altoMascota = mascota.offsetHeight || 64;
+        const anchoMascota = mascota.offsetWidth || 68;
+        const altoMascota = mascota.offsetHeight || 94;
 
         const espacioDerecha = window.innerWidth - rect.right;
         const espacioIzquierda = rect.left;
@@ -81,6 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         mascota.style.left = left + 'px';
         mascota.style.top = top + 'px';
         mascota.style.display = 'flex';
+
+        saludarConElBrazo();
     };
 
     const ocultarMascota = () => {

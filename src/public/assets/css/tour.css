@@ -21,24 +21,27 @@
     color: #1B6B3B;
 }
 
-/* Mascota (robot) que acompaña el cuadro de diálogo del tour */
+/* ==========================================
+   Mascota (robot) que acompaña el cuadro de diálogo del tour
+   ========================================== */
+
 .tour-mascot {
     position: fixed;
     display: none;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1B6B3B, #2E8B57);
-    border: 3px solid #fff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    font-size: 34px;
-    line-height: 1;
+    width: 68px;
     pointer-events: none;
     z-index: 100000;
-    animation: tour-mascot-flotar 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
+    animation: tour-mascot-flotar 1.8s ease-in-out infinite;
     transition: top 0.25s ease, left 0.25s ease;
+}
+
+.tm-svg {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 @keyframes tour-mascot-flotar {
@@ -47,5 +50,99 @@
     }
     50% {
         transform: translateY(-6px);
+    }
+}
+
+/* Cuerpo */
+.tm-cuerpo,
+.tm-cabeza {
+    fill: #ffffff;
+    stroke: #1B6B3B;
+    stroke-width: 2.5;
+}
+
+.tm-pantalla {
+    fill: #1B6B3B;
+}
+
+.tm-pierna,
+.tm-brazo {
+    fill: #1B6B3B;
+}
+
+.tm-ojo {
+    fill: #1B6B3B;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: tm-parpadeo 4.5s ease-in-out infinite;
+}
+
+.tm-boca {
+    fill: #1B6B3B;
+    opacity: 0.55;
+}
+
+.tm-antena {
+    stroke: #1B6B3B;
+    stroke-width: 2.5;
+}
+
+.tm-antena-bola {
+    fill: #FFC107;
+}
+
+.tm-antena-grupo {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: tm-antena-mov 2.6s ease-in-out infinite;
+}
+
+.tm-sombra {
+    fill: rgba(0, 0, 0, 0.18);
+}
+
+/* Parpadeo de ojos, en bucle continuo */
+@keyframes tm-parpadeo {
+    0%, 90%, 100% {
+        transform: scaleY(1);
+    }
+    93%, 96% {
+        transform: scaleY(0.15);
+    }
+}
+
+/* Antena que se mece suavemente todo el tiempo */
+@keyframes tm-antena-mov {
+    0%, 100% {
+        transform: rotate(-6deg);
+    }
+    50% {
+        transform: rotate(6deg);
+    }
+}
+
+/* Saludo con el brazo: se dispara cada vez que la mascota
+   salta a un nuevo paso del tour (ver tutorial.js). */
+.tm-brazo-der-grupo {
+    transform-box: fill-box;
+    transform-origin: 50% 0%;
+}
+
+.tm-brazo-der-grupo.tm-saludando {
+    animation: tm-saludo 0.7s ease-in-out;
+}
+
+@keyframes tm-saludo {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-35deg);
+    }
+    50% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(-35deg);
     }
 }
