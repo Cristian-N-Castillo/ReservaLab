@@ -937,7 +937,7 @@ $mostrarTutorialReservas = !$esAdmin
                 }
             },
             {
-                element: '#fecha',
+                element: '.tour-fecha-visible',
                 popover: {
                     title: 'Fecha',
                     description: 'Elige el día en que necesitas el laboratorio.',

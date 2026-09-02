@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             locale: 'es',
             dateFormat: 'Y-m-d',
             altInput: true,
+            altInputClass: 'form-control tour-fecha-visible',
             altFormat: 'd/m/Y',
             minDate: 'today',
             maxDate: new Date().fp_incr(MAX_DIAS_ANTICIPACION),
