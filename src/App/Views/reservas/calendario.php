@@ -128,7 +128,7 @@ function claseEventoCalendario(array $reserva): string
                                     <?= (int) $dia['dia'] ?>
                                 </div>
 
-                                <?php foreach (array_slice($dia['reservas'], 0, 3) as $reserva): ?>
+                                <?php foreach ($dia['reservas'] as $reserva): ?>
 
                                     <?php
 
@@ -173,14 +173,6 @@ function claseEventoCalendario(array $reserva): string
                                     <?php endif; ?>
 
                                 <?php endforeach; ?>
-
-                                <?php if (count($dia['reservas']) > 3): ?>
-
-                                    <div class="calendario-mas">
-                                        +<?= count($dia['reservas']) - 3 ?> más
-                                    </div>
-
-                                <?php endif; ?>
 
                             </div>
 
