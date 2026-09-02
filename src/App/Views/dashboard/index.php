@@ -254,7 +254,7 @@ function horaDashboard(?string $hora): string
                             </div>
 
                             <small class="text-secondary">
-                                Pendientes
+                                Confirmadas
                             </small>
 
                         </div>

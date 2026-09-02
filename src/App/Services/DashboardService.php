@@ -19,7 +19,7 @@ final class DashboardService
     }
 
     /**
-     * Cantidad de reservas pendientes para hoy.
+     * Cantidad de reservas confirmadas para hoy.
      */
     public function totalReservasHoy(): int
     {

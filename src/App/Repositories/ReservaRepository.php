@@ -268,7 +268,7 @@ final class ReservaRepository extends Repository
     }
 
     /**
-     * Cuenta las reservas pendientes correspondientes
+     * Cuenta las reservas confirmadas correspondientes
      * a la fecha actual.
      */
     public function countReservasHoy(): int
@@ -282,7 +282,7 @@ final class ReservaRepository extends Repository
                 ON er.id_estado = r.id_estado
 
             WHERE r.fecha = CURRENT_DATE
-              AND LOWER(er.nombre) = 'pendiente'
+              AND LOWER(er.nombre) = 'confirmada'
         ";
 
         $statement = $this->db->query($sql);
