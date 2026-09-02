@@ -29,6 +29,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    /*
+     * Mascota (robot) que acompaña al cuadro de diálogo del tour,
+     * reposicionándose junto a él en cada paso. Un solo elemento
+     * compartido por todos los tours del sistema.
+     */
+    const mascota = document.createElement('div');
+    mascota.className = 'tour-mascot';
+    mascota.textContent = '🤖';
+    document.body.appendChild(mascota);
+
+    const posicionarMascota = (popoverEl) => {
+
+        if (!popoverEl) {
+            return;
+        }
+
+        const margen = 14;
+        const rect = popoverEl.getBoundingClientRect();
+        const anchoMascota = mascota.offsetWidth || 64;
+        const altoMascota = mascota.offsetHeight || 64;
+
+        const espacioDerecha = window.innerWidth - rect.right;
+        const espacioIzquierda = rect.left;
+
+        let left;
+
+        if (espacioDerecha >= anchoMascota + margen) {
+            left = rect.right + margen;
+        } else if (espacioIzquierda >= anchoMascota + margen) {
+            left = rect.left - anchoMascota - margen;
+        } else {
+            left = rect.left + (rect.width / 2) - (anchoMascota / 2);
+        }
+
+        let top = espacioDerecha >= anchoMascota + margen
+            || espacioIzquierda >= anchoMascota + margen
+            ? rect.top + (rect.height / 2) - (altoMascota / 2)
+            : rect.bottom + margen;
+
+        left = Math.max(
+            margen,
+            Math.min(left, window.innerWidth - anchoMascota - margen)
+        );
+
+        top = Math.max(
+            margen,
+            Math.min(top, window.innerHeight - altoMascota - margen)
+        );
+
+        mascota.style.left = left + 'px';
+        mascota.style.top = top + 'px';
+        mascota.style.display = 'flex';
+    };
+
+    const ocultarMascota = () => {
+        mascota.style.display = 'none';
+    };
+
     const driverObj = window.driver.js.driver({
         showProgress: true,
         allowClose: true,
@@ -37,7 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
         prevBtnText: 'Anterior',
         doneBtnText: 'Listo',
         progressText: '{{current}} de {{total}}',
-        onDestroyed: marcarVisto,
+        onPopoverRender: (popover) => {
+            requestAnimationFrame(() => posicionarMascota(popover.wrapper));
+        },
+        onDestroyed: () => {
+            ocultarMascota();
+            marcarVisto();
+        },
         steps: config.steps
     });
 

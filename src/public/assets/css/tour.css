@@ -20,3 +20,32 @@
 .driver-popover-prev-btn {
     color: #1B6B3B;
 }
+
+/* Mascota (robot) que acompaña el cuadro de diálogo del tour */
+.tour-mascot {
+    position: fixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1B6B3B, #2E8B57);
+    border: 3px solid #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    font-size: 34px;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 100000;
+    animation: tour-mascot-flotar 1.6s ease-in-out infinite;
+    transition: top 0.25s ease, left 0.25s ease;
+}
+
+@keyframes tour-mascot-flotar {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
