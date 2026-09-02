@@ -52,45 +52,56 @@
     }
 }
 
-/* Cuerpo: colores sólidos y sin contorno, para que se vea nítido
-   incluso a tamaño pequeño (un doble borde fill+stroke se difumina
-   al escalar chico). */
+/* Cuerpo: acabado metálico plateado con acentos verdes
+   institucionales, sin contornos finos (para que se vea nítido
+   incluso a tamaño pequeño). */
 .tm-cabeza {
-    fill: #ffffff;
+    fill: #f4f6f7;
+}
+
+.tm-visor {
+    fill: #16202b;
 }
 
 .tm-cuerpo {
-    fill: #1B6B3B;
+    fill: #d7dee3;
 }
 
 .tm-pantalla {
-    fill: #ffffff;
+    fill: #1B6B3B;
 }
 
 .tm-pierna,
 .tm-brazo {
+    fill: #c3ccd1;
+}
+
+.tm-junta {
     fill: #1B6B3B;
 }
 
 .tm-ojo {
-    fill: #1B6B3B;
+    fill: #ffffff;
     transform-box: fill-box;
     transform-origin: center;
     animation: tm-parpadeo 4.5s ease-in-out infinite;
 }
 
 .tm-boca {
-    fill: #1B6B3B;
-    opacity: 0.55;
+    fill: none;
+    stroke: #16202b;
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.6;
 }
 
 .tm-antena {
-    stroke: #1B6B3B;
+    stroke: #9aa5ab;
     stroke-width: 3;
 }
 
 .tm-antena-bola {
-    fill: #FFC107;
+    fill: #1B6B3B;
 }
 
 .tm-antena-grupo {

@@ -42,20 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
             <ellipse class="tm-sombra" cx="40" cy="103" rx="18" ry="5"></ellipse>
             <rect class="tm-pierna" x="27" y="80" width="9" height="20" rx="4"></rect>
             <rect class="tm-pierna" x="44" y="80" width="9" height="20" rx="4"></rect>
+            <circle class="tm-junta" cx="31.5" cy="80" r="4.5"></circle>
+            <circle class="tm-junta" cx="48.5" cy="80" r="4.5"></circle>
             <rect class="tm-cuerpo" x="17" y="42" width="46" height="42" rx="11"></rect>
             <circle class="tm-pantalla" cx="40" cy="63" r="8"></circle>
             <rect class="tm-brazo" x="5" y="46" width="10" height="27" rx="5"></rect>
+            <circle class="tm-junta" cx="10" cy="46" r="5"></circle>
             <g class="tm-brazo-der-grupo">
                 <rect class="tm-brazo" x="65" y="46" width="10" height="27" rx="5"></rect>
+                <circle class="tm-junta" cx="70" cy="46" r="5"></circle>
             </g>
             <g class="tm-antena-grupo">
                 <line class="tm-antena" x1="40" y1="10" x2="40" y2="2"></line>
                 <circle class="tm-antena-bola" cx="40" cy="2" r="3"></circle>
             </g>
             <rect class="tm-cabeza" x="13" y="10" width="54" height="36" rx="14"></rect>
-            <circle class="tm-ojo" cx="28" cy="28" r="5"></circle>
-            <circle class="tm-ojo" cx="52" cy="28" r="5"></circle>
-            <rect class="tm-boca" x="30" y="38" width="20" height="3" rx="1.5"></rect>
+            <rect class="tm-visor" x="21" y="21" width="38" height="15" rx="7.5"></rect>
+            <circle class="tm-ojo" cx="31" cy="28.5" r="3"></circle>
+            <circle class="tm-ojo" cx="49" cy="28.5" r="3"></circle>
+            <path class="tm-boca" d="M 32 41 Q 40 45 48 41"></path>
         </svg>
     `;
     document.body.appendChild(mascota);
