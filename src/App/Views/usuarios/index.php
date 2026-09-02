@@ -229,6 +229,10 @@ $title = $title ?? 'Usuarios';
 
                 </p>
 
+                <nav>
+                    <ul id="paginacionUsuarios" class="pagination justify-content-center mt-3"></ul>
+                </nav>
+
             </div>
 
         </div>
@@ -344,11 +348,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    inicializarBusquedaTabla({
+    const POR_PAGINA = 6;
+
+    const paginacion = document.getElementById('paginacionUsuarios');
+
+    let paginaActual = 1;
+
+    const tabla = inicializarBusquedaTabla({
         buscadorId: 'buscadorUsuarios',
         filasSelector: '#tablaUsuarios tr[data-busqueda]',
-        sinResultadosId: 'sinResultadosUsuarios'
+        sinResultadosId: 'sinResultadosUsuarios',
+        alBuscar: () => {
+            paginaActual = 1;
+            renderizar();
+        }
     });
+
+    function crearItemPaginacion(etiqueta, pagina, deshabilitado, activo) {
+
+        const li = document.createElement('li');
+        li.className = 'page-item'
+            + (deshabilitado ? ' disabled' : '')
+            + (activo ? ' active' : '');
+
+        const enlace = document.createElement('a');
+        enlace.className = 'page-link';
+        enlace.href = '#';
+        enlace.textContent = etiqueta;
+
+        enlace.addEventListener('click', (evento) => {
+
+            evento.preventDefault();
+
+            if (!deshabilitado) {
+                paginaActual = pagina;
+                renderizar();
+            }
+
+        });
+
+        li.appendChild(enlace);
+
+        return li;
+
+    }
+
+    function renderizarPaginacion(totalPaginas) {
+
+        if (!paginacion) {
+            return;
+        }
+
+        paginacion.innerHTML = '';
+
+        if (totalPaginas <= 1) {
+            return;
+        }
+
+        paginacion.appendChild(
+            crearItemPaginacion('Anterior', paginaActual - 1, paginaActual === 1, false)
+        );
+
+        for (let pagina = 1; pagina <= totalPaginas; pagina++) {
+
+            paginacion.appendChild(
+                crearItemPaginacion(String(pagina), pagina, false, pagina === paginaActual)
+            );
+
+        }
+
+        paginacion.appendChild(
+            crearItemPaginacion('Siguiente', paginaActual + 1, paginaActual === totalPaginas, false)
+        );
+
+    }
+
+    function renderizar() {
+
+        const coincidentes = tabla.obtenerCoincidentes();
+        const totalPaginas = Math.max(1, Math.ceil(coincidentes.length / POR_PAGINA));
+
+        if (paginaActual > totalPaginas) {
+            paginaActual = totalPaginas;
+        }
+
+        const inicio = (paginaActual - 1) * POR_PAGINA;
+
+        tabla.actualizarVisibilidad(coincidentes.slice(inicio, inicio + POR_PAGINA));
+
+        renderizarPaginacion(totalPaginas);
+
+    }
+
+    renderizar();
 
 });
 
