@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const margen = 14;
         const rect = popoverEl.getBoundingClientRect();
-        const anchoMascota = mascota.offsetWidth || 68;
-        const altoMascota = mascota.offsetHeight || 94;
+        const anchoMascota = mascota.offsetWidth || 76;
+        const altoMascota = mascota.offsetHeight || 105;
 
         const espacioDerecha = window.innerWidth - rect.right;
         const espacioIzquierda = rect.left;

@@ -30,10 +30,9 @@
     display: none;
     align-items: flex-end;
     justify-content: center;
-    width: 68px;
+    width: 76px;
     pointer-events: none;
     z-index: 100000;
-    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
     animation: tour-mascot-flotar 1.8s ease-in-out infinite;
     transition: top 0.25s ease, left 0.25s ease;
 }
@@ -53,16 +52,19 @@
     }
 }
 
-/* Cuerpo */
-.tm-cuerpo,
+/* Cuerpo: colores sólidos y sin contorno, para que se vea nítido
+   incluso a tamaño pequeño (un doble borde fill+stroke se difumina
+   al escalar chico). */
 .tm-cabeza {
     fill: #ffffff;
-    stroke: #1B6B3B;
-    stroke-width: 2.5;
+}
+
+.tm-cuerpo {
+    fill: #1B6B3B;
 }
 
 .tm-pantalla {
-    fill: #1B6B3B;
+    fill: #ffffff;
 }
 
 .tm-pierna,
@@ -84,7 +86,7 @@
 
 .tm-antena {
     stroke: #1B6B3B;
-    stroke-width: 2.5;
+    stroke-width: 3;
 }
 
 .tm-antena-bola {
@@ -98,7 +100,7 @@
 }
 
 .tm-sombra {
-    fill: rgba(0, 0, 0, 0.18);
+    fill: rgba(0, 0, 0, 0.2);
 }
 
 /* Parpadeo de ojos, en bucle continuo */
