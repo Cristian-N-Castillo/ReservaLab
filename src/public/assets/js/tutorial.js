@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const config = window.tourConfig;
 
-    if (!config || !config.mostrar || typeof driver === 'undefined') {
+    if (!config || typeof driver === 'undefined') {
         return;
     }
 
