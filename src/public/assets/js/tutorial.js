@@ -122,6 +122,69 @@ document.addEventListener('DOMContentLoaded', () => {
         mascota.style.display = 'none';
     };
 
+    /*
+     * Voz que lee cada paso en voz alta (Web Speech API, nativa del
+     * navegador, sin dependencias externas). Se elige una voz en
+     * español apenas el navegador las tenga disponibles: en varios
+     * navegadores la lista llega de forma asíncrona.
+     */
+    const vozDisponible = 'speechSynthesis' in window;
+    let vozEspanol = null;
+
+    const elegirVoz = () => {
+
+        if (!vozDisponible) {
+            return;
+        }
+
+        const voces = window.speechSynthesis.getVoices();
+
+        vozEspanol = voces.find((v) => v.lang === 'es-CL')
+            || voces.find((v) => v.lang === 'es-ES')
+            || voces.find((v) => v.lang === 'es-MX')
+            || voces.find((v) => v.lang && v.lang.startsWith('es'))
+            || null;
+    };
+
+    if (vozDisponible) {
+        elegirVoz();
+        window.speechSynthesis.onvoiceschanged = elegirVoz;
+    }
+
+    const limpiarParaVoz = (texto) => texto
+        .replace(/\p{Extended_Pictographic}/gu, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const leerPaso = (popover) => {
+
+        if (!vozDisponible) {
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        const titulo = popover.title ? popover.title.innerText : '';
+        const descripcion = popover.description ? popover.description.innerText : '';
+        const texto = limpiarParaVoz(titulo + '. ' + descripcion);
+
+        if (!texto) {
+            return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(texto);
+
+        utterance.lang = vozEspanol ? vozEspanol.lang : 'es-CL';
+        if (vozEspanol) {
+            utterance.voice = vozEspanol;
+        }
+        utterance.rate = 0.95;
+        utterance.pitch = 0.8;
+        utterance.volume = 1;
+
+        window.speechSynthesis.speak(utterance);
+    };
+
     const driverObj = window.driver.js.driver({
         showProgress: true,
         allowClose: true,
@@ -132,9 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText: '{{current}} de {{total}}',
         onPopoverRender: (popover) => {
             requestAnimationFrame(() => posicionarMascota(popover.wrapper));
+            leerPaso(popover);
         },
         onDestroyed: () => {
             ocultarMascota();
+            if (vozDisponible) {
+                window.speechSynthesis.cancel();
+            }
             marcarVisto();
         },
         steps: config.steps
