@@ -47,6 +47,17 @@ $mostrarTutorialReservas = !$esAdmin
 
         </div>
 
+        <button
+            type="button"
+            id="btnVerGuiaReservas"
+            class="btn btn-outline-primary"
+            onclick="window.iniciarTourGuiado && window.iniciarTourGuiado()">
+
+            <i class="bi bi-question-circle me-2"></i>
+            Ver guía
+
+        </button>
+
     </div>
 
 
@@ -903,98 +914,99 @@ $mostrarTutorialReservas = !$esAdmin
 <!-- JavaScript específico del módulo Reservas -->
 <script src="<?= \Core\Asset::url('/assets/js/reservas.js') ?>"></script>
 
-<?php if ($mostrarTutorialReservas): ?>
+<!--
+    Tour guiado del módulo Reservas: se auto-inicia solo la primera vez
+    que un Docente entra (mostrarTutorialReservas), pero el script queda
+    disponible siempre para que el botón "Ver guía" del header pueda
+    relanzarlo manualmente en cualquier momento, para cualquier rol.
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
+<link rel="stylesheet" href="<?= \Core\Asset::url('/assets/css/tour.css') ?>">
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
 
-    <!-- Tour guiado del módulo Reservas (solo Docente, solo la primera vez) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
-    <link rel="stylesheet" href="<?= \Core\Asset::url('/assets/css/tour.css') ?>">
-    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
-
-    <script>
-        window.tourConfig = {
-            modulo: 'reservas',
-            mostrar: true,
-            token: '<?= addslashes(\Core\Csrf::token()) ?>',
-            steps: [
-                {
-                    popover: {
-                        title: '📅 Cómo reservar un laboratorio',
-                        description: 'Te mostramos rápidamente cómo crear una reserva. Puedes cerrar este recorrido en cualquier momento.'
-                    }
-                },
-                {
-                    element: '#fecha',
-                    popover: {
-                        title: 'Fecha',
-                        description: 'Elige el día en que necesitas el laboratorio.',
-                        side: 'bottom',
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#id_laboratorio',
-                    popover: {
-                        title: 'Laboratorio',
-                        description: 'Elige qué laboratorio vas a usar.',
-                        side: 'bottom',
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#id_curso',
-                    popover: {
-                        title: 'Curso',
-                        description: 'Elige el curso con el que asistirás.',
-                        side: 'bottom',
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#tour-bloques-horarios',
-                    popover: {
-                        title: 'Bloques Horarios',
-                        description: 'Aquí ves los bloques disponibles para la fecha y laboratorio elegidos. Puedes seleccionar hasta 3 haciendo clic en "Seleccionar".',
-                        side: 'left',
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#bloqueSeleccionado',
-                    popover: {
-                        title: 'Resumen',
-                        description: 'Aquí verás los bloques que vayas seleccionando.',
-                        side: 'top',
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#motivo',
-                    popover: {
-                        title: 'Motivo',
-                        description: 'Cuéntanos brevemente qué actividad realizarán en el laboratorio.',
-                        side: 'top',
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#btnReservar',
-                    popover: {
-                        title: 'Realizar Reserva',
-                        description: 'Cuando termines, presiona aquí. Te llegará un correo para confirmar o cancelar la reserva.',
-                        side: 'top',
-                        align: 'start'
-                    }
-                },
-                {
-                    popover: {
-                        title: '✅ ¡Listo!',
-                        description: 'Ya sabes cómo reservar un laboratorio. Recuerda que puedes hacerlo también desde el botón "Reservar" en la pantalla de Laboratorios.'
-                    }
+<script>
+    window.tourConfig = {
+        modulo: 'reservas',
+        mostrar: <?= $mostrarTutorialReservas ? 'true' : 'false' ?>,
+        token: '<?= addslashes(\Core\Csrf::token()) ?>',
+        steps: [
+            {
+                popover: {
+                    title: '📅 Cómo reservar un laboratorio',
+                    description: 'Te mostramos rápidamente cómo crear una reserva. Puedes cerrar este recorrido en cualquier momento.'
                 }
-            ]
-        };
-    </script>
+            },
+            {
+                element: '#fecha',
+                popover: {
+                    title: 'Fecha',
+                    description: 'Elige el día en que necesitas el laboratorio.',
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            {
+                element: '#id_laboratorio',
+                popover: {
+                    title: 'Laboratorio',
+                    description: 'Elige qué laboratorio vas a usar.',
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            {
+                element: '#id_curso',
+                popover: {
+                    title: 'Curso',
+                    description: 'Elige el curso con el que asistirás.',
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            {
+                element: '#tour-bloques-horarios',
+                popover: {
+                    title: 'Bloques Horarios',
+                    description: 'Aquí ves los bloques disponibles para la fecha y laboratorio elegidos. Puedes seleccionar hasta 3 haciendo clic en "Seleccionar".',
+                    side: 'left',
+                    align: 'start'
+                }
+            },
+            {
+                element: '#bloqueSeleccionado',
+                popover: {
+                    title: 'Resumen',
+                    description: 'Aquí verás los bloques que vayas seleccionando.',
+                    side: 'top',
+                    align: 'start'
+                }
+            },
+            {
+                element: '#motivo',
+                popover: {
+                    title: 'Motivo',
+                    description: 'Cuéntanos brevemente qué actividad realizarán en el laboratorio.',
+                    side: 'top',
+                    align: 'start'
+                }
+            },
+            {
+                element: '#btnReservar',
+                popover: {
+                    title: 'Realizar Reserva',
+                    description: 'Cuando termines, presiona aquí. Te llegará un correo para confirmar o cancelar la reserva.',
+                    side: 'top',
+                    align: 'start'
+                }
+            },
+            {
+                popover: {
+                    title: '✅ ¡Listo!',
+                    description: 'Ya sabes cómo reservar un laboratorio. Recuerda que puedes hacerlo también desde el botón "Reservar" en la pantalla de Laboratorios.'
+                }
+            }
+        ]
+    };
+</script>
 
-    <script src="<?= \Core\Asset::url('/assets/js/tutorial.js') ?>"></script>
-
-<?php endif; ?>
+<script src="<?= \Core\Asset::url('/assets/js/tutorial.js') ?>"></script>

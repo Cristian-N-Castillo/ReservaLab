@@ -41,6 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
         steps: config.steps
     });
 
-    driverObj.drive();
+    /*
+     * Se expone globalmente para que un botón "Ver guía" en la vista
+     * pueda relanzar el mismo tour en cualquier momento, no solo la
+     * primera vez.
+     */
+    window.iniciarTourGuiado = () => driverObj.drive();
+
+    if (config.mostrar) {
+        driverObj.drive();
+    }
 
 });
