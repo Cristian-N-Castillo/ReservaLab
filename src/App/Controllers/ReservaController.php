@@ -86,13 +86,6 @@ final class ReservaController extends Controller
             );
         }
 
-        /*
-         * Reservas existentes para la fecha seleccionada.
-         */
-        $reservas = $this->agendaService->obtenerReservas(
-            $fecha
-        );
-
         return $this->view(
             'reservas.index',
             [
@@ -109,8 +102,6 @@ final class ReservaController extends Controller
                 'laboratorios' => $laboratorios,
 
                 'bloques' => $bloques,
-
-                'reservas' => $reservas,
             ]
         );
     }
