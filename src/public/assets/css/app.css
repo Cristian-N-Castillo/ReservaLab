@@ -439,11 +439,12 @@ span.calendario-evento {
 }
 
 /* ==========================================
-   Variante compacta: horario del docente
+   Variante compacta del calendario
    ==========================================
    Solo lunes a viernes (no se puede reservar fin de semana) y con
    celdas más bajas, para que quepa completo sin ocupar toda la
-   pantalla. El calendario del administrador mantiene los 7 días.
+   pantalla. La usan tanto el horario del docente como el
+   calendario general del administrador.
    ========================================== */
 
 .calendario-grid-compacto {

@@ -17,7 +17,8 @@ use Core\Session;
 $esAdmin = (int) Session::get('id_rol', 0) === 1;
 $usuarioActual = (int) Session::get('usuario_id', 0);
 
-$diasSemana = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
+// Solo días hábiles: no se puede reservar sábado ni domingo.
+$diasSemana = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi'];
 
 $meses = [
     1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
@@ -106,7 +107,7 @@ function claseEventoCalendario(array $reserva): string
 
             <div class="calendario-scroll">
 
-                <div class="calendario-grid">
+                <div class="calendario-grid calendario-grid-compacto">
 
                     <?php foreach ($diasSemana as $nombreDia): ?>
 
