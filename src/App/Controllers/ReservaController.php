@@ -154,6 +154,22 @@ final class ReservaController extends Controller
             $finGrilla->format('Y-m-d')
         );
 
+        /*
+         * Filtro por laboratorio: con varios laboratorios activos el
+         * mes completo queda muy cargado, así que se puede acotar la
+         * vista a uno solo. 0 = todos.
+         */
+        $idLaboratorio = (int) $request->input('id_laboratorio', 0);
+
+        if ($idLaboratorio > 0) {
+
+            $reservas = array_values(array_filter(
+                $reservas,
+                static fn (array $r): bool =>
+                    (int) $r['id_laboratorio'] === $idLaboratorio
+            ));
+        }
+
         $reservasPorDia = [];
 
         foreach ($reservas as $reserva) {
@@ -222,6 +238,8 @@ final class ReservaController extends Controller
                 'mesAnterior' => (int) $mesAnterior->format('n'),
                 'anioSiguiente' => (int) $mesSiguiente->format('Y'),
                 'mesSiguiente' => (int) $mesSiguiente->format('n'),
+                'laboratorios' => $this->laboratorioService->listar(),
+                'idLaboratorioSeleccionado' => $idLaboratorio,
             ]
         );
     }

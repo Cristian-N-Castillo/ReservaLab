@@ -12,10 +12,23 @@ use Core\Session;
  * @var int $mesAnterior
  * @var int $anioSiguiente
  * @var int $mesSiguiente
+ * @var array $laboratorios
+ * @var int $idLaboratorioSeleccionado
  */
 
 $esAdmin = (int) Session::get('id_rol', 0) === 1;
 $usuarioActual = (int) Session::get('usuario_id', 0);
+
+$laboratorios = $laboratorios ?? [];
+$idLaboratorioSeleccionado = (int) ($idLaboratorioSeleccionado ?? 0);
+
+/*
+ * El filtro de laboratorio tiene que sobrevivir al cambiar de mes,
+ * así que se arrastra en los enlaces de navegación.
+ */
+$filtroLaboratorio = $idLaboratorioSeleccionado > 0
+    ? '&id_laboratorio=' . $idLaboratorioSeleccionado
+    : '';
 
 // Solo días hábiles: no se puede reservar sábado ni domingo.
 $diasSemana = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi'];
@@ -61,10 +74,54 @@ function claseEventoCalendario(array $reserva): string
 
         </div>
 
-        <a href="/reservas" class="btn btn-primary">
-            <i class="bi bi-calendar-plus me-2"></i>
-            Nueva Reserva
-        </a>
+        <div class="d-flex align-items-center flex-wrap gap-2">
+
+            <!-- Filtro por laboratorio: recarga el mes que se está
+                 viendo, acotado a un solo laboratorio. -->
+            <form method="GET" action="/reservas/calendario" class="d-flex align-items-center gap-2">
+
+                <input type="hidden" name="anio" value="<?= (int) $nombreMes->format('Y') ?>">
+                <input type="hidden" name="mes" value="<?= (int) $nombreMes->format('n') ?>">
+
+                <label for="filtroLaboratorio" class="form-label mb-0 text-muted small text-nowrap">
+                    <i class="bi bi-funnel me-1"></i>
+                    Laboratorio
+                </label>
+
+                <select
+                    name="id_laboratorio"
+                    id="filtroLaboratorio"
+                    class="form-select form-select-sm"
+                    onchange="this.form.submit()">
+
+                    <option value="0">
+                        Todos los laboratorios
+                    </option>
+
+                    <?php foreach ($laboratorios as $laboratorio): ?>
+
+                        <?php $idLab = (int) $laboratorio->id_laboratorio; ?>
+
+                        <option
+                            value="<?= $idLab ?>"
+                            <?= $idLab === $idLaboratorioSeleccionado ? 'selected' : '' ?>>
+
+                            <?= htmlspecialchars($laboratorio->nombre) ?>
+
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+            </form>
+
+            <a href="/reservas" class="btn btn-primary text-nowrap">
+                <i class="bi bi-calendar-plus me-2"></i>
+                Nueva Reserva
+            </a>
+
+        </div>
 
     </div>
 
@@ -80,20 +137,22 @@ function claseEventoCalendario(array $reserva): string
             <div class="btn-group">
 
                 <a
-                    href="/reservas/calendario?anio=<?= $anioAnterior ?>&mes=<?= $mesAnterior ?>"
+                    href="/reservas/calendario?anio=<?= $anioAnterior ?>&mes=<?= $mesAnterior ?><?= $filtroLaboratorio ?>"
                     class="btn btn-outline-secondary btn-sm"
                     title="Mes anterior">
                     <i class="bi bi-chevron-left"></i>
                 </a>
 
                 <a
-                    href="/reservas/calendario"
+                    href="/reservas/calendario<?= $filtroLaboratorio !== ''
+                        ? '?id_laboratorio=' . $idLaboratorioSeleccionado
+                        : '' ?>"
                     class="btn btn-outline-secondary btn-sm">
                     Hoy
                 </a>
 
                 <a
-                    href="/reservas/calendario?anio=<?= $anioSiguiente ?>&mes=<?= $mesSiguiente ?>"
+                    href="/reservas/calendario?anio=<?= $anioSiguiente ?>&mes=<?= $mesSiguiente ?><?= $filtroLaboratorio ?>"
                     class="btn btn-outline-secondary btn-sm"
                     title="Mes siguiente">
                     <i class="bi bi-chevron-right"></i>

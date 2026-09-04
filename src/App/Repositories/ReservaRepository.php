@@ -603,6 +603,7 @@ final class ReservaRepository extends Repository
             SELECT
                 r.id_reserva,
                 r.id_usuario,
+                r.id_laboratorio,
                 r.fecha,
                 r.motivo,
 
