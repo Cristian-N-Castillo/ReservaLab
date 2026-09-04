@@ -205,15 +205,29 @@ footer {
     transition:.2s;
 }
 
+/* Los iconos llevan el verde institucional en vez de heredar el
+   gris del texto: así resaltan en lugar de fundirse con él. */
 .sidebar-menu .nav-link i{
-    font-size:1.15rem;
-    width:22px;
+    font-size:1.3rem;
+    width:24px;
     text-align:center;
+    color:#1B6B3B;
+    transition:transform .2s, color .2s;
 }
 
 .sidebar-menu .nav-link:hover{
     background:#e6f4ea;
     color:#1B6B3B;
+}
+
+.sidebar-menu .nav-link:hover i{
+    transform:scale(1.12);
+}
+
+/* En el ítem activo el fondo ya es verde, así que el icono va en
+   blanco para que siga siendo legible. */
+.sidebar-menu .nav-link.active i{
+    color:#fff;
 }
 
 .sidebar-menu .nav-link.active{
@@ -223,6 +237,10 @@ footer {
 }
 
 .sidebar-menu .nav-link.disabled{
+    color:#adb5bd;
+}
+
+.sidebar-menu .nav-link.disabled i{
     color:#adb5bd;
 }
 

@@ -112,7 +112,7 @@ function active(string $route, string $current): string
                 class="nav-link <?= active('/reservas', $current) ?>"
                 href="/reservas">
 
-                <i class="bi bi-calendar-check"></i>
+                <i class="bi bi-calendar-check-fill"></i>
 
                 Reservas
 

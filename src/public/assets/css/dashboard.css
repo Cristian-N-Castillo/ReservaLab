@@ -37,6 +37,8 @@
     box-shadow: 0 12px 30px rgba(0,0,0,.12);
 }
 
+/* Círculo sólido con el icono en blanco: antes era un verde al 12%
+   de opacidad sobre blanco y se veía muy lavado. */
 .stat-icon {
     width: 65px;
     height: 65px;
@@ -45,8 +47,14 @@
     justify-content: center;
     align-items: center;
     font-size: 1.8rem;
-    background: rgba(27,107,59,.12);
-    color: #1B6B3B;
+    background: linear-gradient(135deg, #1B6B3B, #2E8B57);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(27,107,59,.28);
+    transition: transform .25s ease;
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.06);
 }
 
 .stat-number {
@@ -74,6 +82,13 @@
     border-bottom: 1px solid #edf0f2;
     font-weight: 600;
     padding: 18px 22px;
+}
+
+/* El icono de la cabecera va en verde, en tono con el resto de la
+   interfaz, en vez del gris oscuro heredado del texto. */
+.dashboard-card .card-header > i,
+.dashboard-card .card-header > div > i {
+    color: #1B6B3B;
 }
 
 .dashboard-card .card-body {
