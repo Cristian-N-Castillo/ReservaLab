@@ -18,7 +18,8 @@ $nombre = Session::get('nombre', 'Docente');
 
 date_default_timezone_set('America/Santiago');
 
-$diasSemana = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
+// El horario solo muestra días hábiles: no se reserva fin de semana.
+$diasSemana = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi'];
 
 $dias = [
     'Sunday'    => 'Domingo',
@@ -237,7 +238,7 @@ function claseEventoHorarioDocente(array $reserva): string
 
             <div class="calendario-scroll">
 
-                <div class="calendario-grid">
+                <div class="calendario-grid calendario-grid-compacto">
 
                     <?php foreach ($diasSemana as $nombreDia): ?>
 

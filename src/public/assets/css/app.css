@@ -437,3 +437,39 @@ span.calendario-evento {
     border-radius: 50%;
     display: inline-block;
 }
+
+/* ==========================================
+   Variante compacta: horario del docente
+   ==========================================
+   Solo lunes a viernes (no se puede reservar fin de semana) y con
+   celdas más bajas, para que quepa completo sin ocupar toda la
+   pantalla. El calendario del administrador mantiene los 7 días.
+   ========================================== */
+
+.calendario-grid-compacto {
+    grid-template-columns: repeat(5, minmax(110px, 1fr));
+    min-width: 560px;
+}
+
+.calendario-grid-compacto .calendario-cabecera {
+    padding: 6px;
+    font-size: .72rem;
+}
+
+.calendario-grid-compacto .calendario-dia {
+    min-height: 74px;
+    padding: 4px;
+    gap: 2px;
+}
+
+.calendario-grid-compacto .calendario-numero {
+    width: 20px;
+    height: 20px;
+    font-size: .74rem;
+    margin-bottom: 0;
+}
+
+.calendario-grid-compacto .calendario-evento {
+    font-size: .67rem;
+    padding: 1px 5px;
+}

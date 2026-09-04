@@ -129,9 +129,11 @@ final class DashboardController extends Controller
         ));
 
         /*
-         * La grilla siempre muestra semanas completas (lunes a
-         * domingo), incluyendo días del mes anterior/siguiente
-         * para rellenar la primera y última semana.
+         * La grilla arranca el lunes de la primera semana y termina
+         * el domingo de la última, para no cortar semanas por la
+         * mitad. Después solo se pintan los días hábiles: no se
+         * puede reservar sábado ni domingo, así que mostrarlos solo
+         * ocupa espacio.
          */
         $inicioGrilla = $primerDiaMes->modify(
             '-' . ((int) $primerDiaMes->format('N') - 1) . ' days'
@@ -192,13 +194,17 @@ final class DashboardController extends Controller
 
                 $fechaTexto = $cursor->format('Y-m-d');
 
-                $semana[] = [
-                    'fecha' => $fechaTexto,
-                    'dia' => (int) $cursor->format('j'),
-                    'esMesActual' => $cursor->format('n') === $primerDiaMes->format('n'),
-                    'esHoy' => $fechaTexto === $hoy,
-                    'reservas' => $reservasPorDia[$fechaTexto] ?? [],
-                ];
+                // Solo lunes (1) a viernes (5); el fin de semana se omite.
+                if ((int) $cursor->format('N') <= 5) {
+
+                    $semana[] = [
+                        'fecha' => $fechaTexto,
+                        'dia' => (int) $cursor->format('j'),
+                        'esMesActual' => $cursor->format('n') === $primerDiaMes->format('n'),
+                        'esHoy' => $fechaTexto === $hoy,
+                        'reservas' => $reservasPorDia[$fechaTexto] ?? [],
+                    ];
+                }
 
                 $cursor = $cursor->modify('+1 day');
             }
