@@ -38,7 +38,6 @@ final class ReporteService
             'por_docente' => $this->repository->porDocente($desde, $hasta),
             'por_curso' => $this->repository->porCurso($desde, $hasta),
             'mas_utilizados' => array_slice($porLaboratorio, 0, 5),
-            'historial' => $this->repository->historial($desde, $hasta),
         ];
     }
 

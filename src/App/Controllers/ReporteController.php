@@ -51,7 +51,6 @@ final class ReporteController extends Controller
                 'porDocente' => $reportes['por_docente'],
                 'porCurso' => $reportes['por_curso'],
                 'masUtilizados' => $reportes['mas_utilizados'],
-                'historial' => $reportes['historial'],
             ]
         );
     }
