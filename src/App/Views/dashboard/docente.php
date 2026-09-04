@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 use Core\Session;
 
-/** @var array $historial */
 /** @var int $totalReservas */
 /** @var int $totalProximas */
 /** @var int $totalCanceladas */
+/** @var array $semanas */
+/** @var \DateTimeImmutable $nombreMes */
+/** @var int $anioAnterior */
+/** @var int $mesAnterior */
+/** @var int $anioSiguiente */
+/** @var int $mesSiguiente */
 
 $nombre = Session::get('nombre', 'Docente');
 
 date_default_timezone_set('America/Santiago');
+
+$diasSemana = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
 
 $dias = [
     'Sunday'    => 'Domingo',
@@ -37,16 +44,23 @@ $fechaActual = sprintf(
     (int) date('Y')
 );
 
-function fechaDashboardDocente(string $fecha): string
-{
-    $timestamp = strtotime($fecha);
-
-    return $timestamp === false ? $fecha : date('d/m/Y', $timestamp);
-}
-
 function horaDashboardDocente(?string $hora): string
 {
     return empty($hora) ? '' : substr($hora, 0, 5);
+}
+
+/**
+ * Color del evento según el estado de la reserva. El horario solo
+ * recibe reservas Pendientes o Confirmadas (el controlador ya
+ * descarta el resto).
+ */
+function claseEventoHorarioDocente(array $reserva): string
+{
+    $estado = mb_strtolower((string) $reserva['estado']);
+
+    return $estado === 'pendiente'
+        ? 'evento-pendiente'
+        : 'evento-confirmada';
 }
 
 ?>
@@ -181,108 +195,119 @@ function horaDashboardDocente(?string $hora): string
 
     </div>
 
-    <!-- Historial -->
+    <!-- Mi horario -->
     <div class="card dashboard-card">
 
-        <div class="card-header">
-            <i class="bi bi-clock-history me-1"></i>
-            Historial de Reservas (este mes)
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <div>
+                <i class="bi bi-calendar3 me-1"></i>
+                Mi Horario &mdash;
+                <span class="text-capitalize">
+                    <?= htmlspecialchars($meses[(int) $nombreMes->format('n')]) ?>
+                    <?= htmlspecialchars($nombreMes->format('Y')) ?>
+                </span>
+            </div>
+
+            <div class="btn-group">
+
+                <a
+                    href="/dashboard?anio=<?= $anioAnterior ?>&mes=<?= $mesAnterior ?>"
+                    class="btn btn-outline-secondary btn-sm"
+                    title="Mes anterior">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+
+                <a href="/dashboard" class="btn btn-outline-secondary btn-sm">
+                    Hoy
+                </a>
+
+                <a
+                    href="/dashboard?anio=<?= $anioSiguiente ?>&mes=<?= $mesSiguiente ?>"
+                    class="btn btn-outline-secondary btn-sm"
+                    title="Mes siguiente">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+
+            </div>
+
         </div>
 
         <div class="card-body p-0">
 
-            <?php if (empty($historial)): ?>
+            <div class="calendario-scroll">
 
-                <div class="empty-state py-5">
-                    <i class="bi bi-calendar-x"></i>
-                    <h5>Aún no tiene reservas este mes</h5>
-                    <p class="mb-3">Cuando realice una reserva aparecerá aquí.</p>
-                    <a href="/reservas" class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-calendar-plus me-1"></i>
-                        Crear reserva
-                    </a>
-                </div>
+                <div class="calendario-grid">
 
-            <?php else: ?>
+                    <?php foreach ($diasSemana as $nombreDia): ?>
 
-                <div class="table-responsive">
+                        <div class="calendario-cabecera">
+                            <?= htmlspecialchars($nombreDia) ?>
+                        </div>
 
-                    <table class="table table-hover align-middle mb-0">
+                    <?php endforeach; ?>
 
-                        <thead class="table-light">
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Bloque</th>
-                                <th>Laboratorio</th>
-                                <th>Curso</th>
-                                <th>Estado</th>
-                                <th class="text-center">Observaciones</th>
-                            </tr>
-                        </thead>
+                    <?php foreach ($semanas as $semana): ?>
 
-                        <tbody>
+                        <?php foreach ($semana as $dia): ?>
 
-                            <?php foreach ($historial as $reserva): ?>
+                            <div class="calendario-dia
+                                <?= $dia['esMesActual'] ? '' : 'calendario-dia-fuera' ?>
+                                <?= $dia['esHoy'] ? 'calendario-dia-hoy' : '' ?>">
 
-                                <?php
+                                <div class="calendario-numero">
+                                    <?= (int) $dia['dia'] ?>
+                                </div>
 
-                                $estado = strtolower((string) ($reserva['estado'] ?? ''));
+                                <?php foreach ($dia['reservas'] as $reserva): ?>
 
-                                $badgeEstado = match ($estado) {
-                                    'pendiente'  => 'bg-warning text-dark',
-                                    'confirmada' => 'bg-success',
-                                    'finalizada' => 'bg-secondary',
-                                    'cancelada'  => 'bg-danger',
-                                    default      => 'bg-secondary'
-                                };
+                                    <?php
 
-                                ?>
+                                    $tituloEvento = horaDashboardDocente($reserva['hora_inicio'] ?? null)
+                                        . ' - ' . (string) $reserva['curso']
+                                        . ' - ' . (string) $reserva['laboratorio']
+                                        . ' (' . (string) $reserva['estado'] . ')';
 
-                                <tr>
+                                    ?>
 
-                                    <td><?= htmlspecialchars(fechaDashboardDocente((string) $reserva['fecha'])) ?></td>
+                                    <a
+                                        href="/reservas/<?= (int) $reserva['id_reserva'] ?>/observaciones"
+                                        class="calendario-evento <?= claseEventoHorarioDocente($reserva) ?>"
+                                        title="<?= htmlspecialchars($tituloEvento) ?>">
 
-                                    <td>
-                                        <?= htmlspecialchars((string) $reserva['horario']) ?>
-                                        <small class="text-muted d-block">
-                                            <?= horaDashboardDocente($reserva['hora_inicio'] ?? null) ?>
-                                            -
-                                            <?= horaDashboardDocente($reserva['hora_fin'] ?? null) ?>
-                                        </small>
-                                    </td>
+                                        <?= htmlspecialchars(horaDashboardDocente($reserva['hora_inicio'] ?? null)) ?>
+                                        &middot;
+                                        <?= htmlspecialchars((string) $reserva['curso']) ?>
 
-                                    <td><?= htmlspecialchars((string) $reserva['laboratorio']) ?></td>
+                                    </a>
 
-                                    <td><?= htmlspecialchars((string) $reserva['curso']) ?></td>
+                                <?php endforeach; ?>
 
-                                    <td>
-                                        <span class="badge <?= $badgeEstado ?>">
-                                            <?= htmlspecialchars((string) $reserva['estado']) ?>
-                                        </span>
-                                    </td>
+                            </div>
 
-                                    <td class="text-center">
-                                        <a
-                                            href="/reservas/<?= (int) $reserva['id_reserva'] ?>/observaciones"
-                                            class="btn btn-sm btn-outline-dark"
-                                            title="Ver observaciones">
-                                            <i class="bi bi-journal-text"></i>
-                                        </a>
-                                    </td>
+                        <?php endforeach; ?>
 
-                                </tr>
-
-                            <?php endforeach; ?>
-
-                        </tbody>
-
-                    </table>
+                    <?php endforeach; ?>
 
                 </div>
 
-            <?php endif; ?>
+            </div>
 
         </div>
+
+    </div>
+
+    <div class="d-flex flex-wrap gap-3 mt-3">
+
+        <span class="calendario-leyenda">
+            <span class="calendario-punto evento-confirmada"></span>
+            Confirmada
+        </span>
+
+        <span class="calendario-leyenda">
+            <span class="calendario-punto evento-pendiente"></span>
+            Pendiente
+        </span>
 
     </div>
 

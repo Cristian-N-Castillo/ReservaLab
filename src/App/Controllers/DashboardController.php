@@ -9,6 +9,7 @@ use App\Services\DashboardService;
 use App\Services\ReservaService;
 use App\Services\UsuarioService;
 use Core\Controller;
+use Core\Request;
 use Core\Session;
 
 final class DashboardController extends Controller
@@ -77,21 +78,41 @@ final class DashboardController extends Controller
 
     private function indexDocente(): string
     {
+        date_default_timezone_set('America/Santiago');
+
         $idUsuario = (int) Session::get('usuario_id', 0);
 
+        $request = new Request();
+
         /*
-         * El Dashboard del docente solo muestra el mes en curso (se
-         * "reinicia" visualmente cada mes). Esto no borra ni afecta
-         * los datos: el historial completo sigue existiendo en la
-         * base de datos, solo se filtra esta consulta puntual.
+         * El Dashboard del docente muestra un mes a la vez, como un
+         * horario: tanto las estadísticas como la grilla siempre
+         * corresponden al mes que se está viendo. Esto no borra ni
+         * afecta los datos: el historial completo sigue existiendo
+         * en la base de datos, solo se filtran estas consultas.
          */
-        $primerDiaMes = date('Y-m-01');
-        $ultimoDiaMes = date('Y-m-t');
+        $anio = (int) $request->input('anio', (int) date('Y'));
+        $mes = (int) $request->input('mes', (int) date('n'));
+
+        if ($mes < 1 || $mes > 12) {
+            $mes = (int) date('n');
+        }
+
+        $primerDiaMes = \DateTimeImmutable::createFromFormat(
+            '!Y-m-d',
+            sprintf('%04d-%02d-01', $anio, $mes)
+        );
+
+        if ($primerDiaMes === false) {
+            $primerDiaMes = new \DateTimeImmutable('first day of this month');
+        }
+
+        $ultimoDiaMes = $primerDiaMes->modify('last day of this month');
 
         $historial = $this->reservaService->historialPorUsuario(
             $idUsuario,
-            $primerDiaMes,
-            $ultimoDiaMes
+            $primerDiaMes->format('Y-m-d'),
+            $ultimoDiaMes->format('Y-m-d')
         );
 
         $hoy = date('Y-m-d');
@@ -107,14 +128,101 @@ final class DashboardController extends Controller
             static fn (array $r): bool => strtolower((string) $r['estado']) === 'cancelada'
         ));
 
+        /*
+         * La grilla siempre muestra semanas completas (lunes a
+         * domingo), incluyendo días del mes anterior/siguiente
+         * para rellenar la primera y última semana.
+         */
+        $inicioGrilla = $primerDiaMes->modify(
+            '-' . ((int) $primerDiaMes->format('N') - 1) . ' days'
+        );
+
+        $finGrilla = $ultimoDiaMes->modify(
+            '+' . (7 - (int) $ultimoDiaMes->format('N')) . ' days'
+        );
+
+        /*
+         * En el horario solo tienen sentido las reservas vigentes:
+         * las canceladas siguen contándose en la tarjeta de
+         * estadísticas, pero no se pintan en la grilla.
+         */
+        $reservasGrilla = array_values(array_filter(
+            $this->reservaService->historialPorUsuario(
+                $idUsuario,
+                $inicioGrilla->format('Y-m-d'),
+                $finGrilla->format('Y-m-d')
+            ),
+            static fn (array $r): bool => in_array(
+                mb_strtolower((string) $r['estado']),
+                ['pendiente', 'confirmada'],
+                true
+            )
+        ));
+
+        $reservasPorDia = [];
+
+        foreach ($reservasGrilla as $reserva) {
+            $reservasPorDia[$reserva['fecha']][] = $reserva;
+        }
+
+        /*
+         * historialPorUsuario() ordena de más reciente a más antiguo
+         * (pensado para una lista), pero en el horario cada día debe
+         * verse en orden cronológico: el primer bloque arriba.
+         */
+        foreach ($reservasPorDia as &$reservasDelDia) {
+
+            usort(
+                $reservasDelDia,
+                static fn (array $a, array $b): int =>
+                    ((string) $a['hora_inicio']) <=> ((string) $b['hora_inicio'])
+            );
+        }
+
+        unset($reservasDelDia);
+
+        $semanas = [];
+        $cursor = $inicioGrilla;
+
+        while ($cursor <= $finGrilla) {
+
+            $semana = [];
+
+            for ($i = 0; $i < 7; $i++) {
+
+                $fechaTexto = $cursor->format('Y-m-d');
+
+                $semana[] = [
+                    'fecha' => $fechaTexto,
+                    'dia' => (int) $cursor->format('j'),
+                    'esMesActual' => $cursor->format('n') === $primerDiaMes->format('n'),
+                    'esHoy' => $fechaTexto === $hoy,
+                    'reservas' => $reservasPorDia[$fechaTexto] ?? [],
+                ];
+
+                $cursor = $cursor->modify('+1 day');
+            }
+
+            $semanas[] = $semana;
+        }
+
+        $mesAnterior = $primerDiaMes->modify('-1 month');
+        $mesSiguiente = $primerDiaMes->modify('+1 month');
+
         return $this->view(
             'dashboard.docente',
             [
                 'title' => 'Dashboard',
-                'historial' => $historial,
                 'totalReservas' => count($historial),
                 'totalProximas' => count($proximas),
                 'totalCanceladas' => count($canceladas),
+                'semanas' => $semanas,
+                'nombreMes' => $primerDiaMes,
+                'hoy' => $hoy,
+                'anioAnterior' => (int) $mesAnterior->format('Y'),
+                'mesAnterior' => (int) $mesAnterior->format('n'),
+                'anioSiguiente' => (int) $mesSiguiente->format('Y'),
+                'mesSiguiente' => (int) $mesSiguiente->format('n'),
                 'mostrarTutorial' => !in_array(
                     'dashboard',
                     Session::get('tutoriales_vistos', []),
