@@ -233,6 +233,185 @@ function horaDashboard(?string $hora): string
 
             </div>
 
+
+            <!-- ===================================================== -->
+            <!-- PRÓXIMAS RESERVAS -->
+            <!-- ===================================================== -->
+
+            <div class="card dashboard-card">
+
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <div>
+                        <i class="bi bi-calendar-week me-1"></i>
+                        Próximas Reservas
+                    </div>
+
+                    <?php if (!empty($proximasReservas)): ?>
+
+                        <span class="badge bg-primary">
+                            <?= count($proximasReservas) ?>
+                        </span>
+
+                    <?php endif; ?>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <?php if (empty($proximasReservas)): ?>
+
+                        <div class="empty-state py-5">
+
+                            <i class="bi bi-calendar-x"></i>
+
+                            <h5>No hay reservas programadas</h5>
+
+                            <p class="mb-3">Cuando existan reservas aparecerán aquí.</p>
+
+                            <a href="/reservas" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-calendar-plus me-1"></i>
+                                Crear reserva
+                            </a>
+
+                        </div>
+
+                    <?php else: ?>
+
+                        <div class="list-group list-group-flush">
+
+                            <?php foreach ($proximasReservas as $reserva): ?>
+
+                                <?php
+
+                                $estado = mb_strtolower((string) ($reserva['estado'] ?? ''));
+
+                                $badgeEstado = match ($estado) {
+                                    'pendiente'  => 'bg-warning text-dark',
+                                    'confirmada' => 'bg-success',
+                                    'finalizada' => 'bg-secondary',
+                                    'cancelada'  => 'bg-danger',
+                                    default      => 'bg-secondary'
+                                };
+
+                                $urlAgenda = '/reservas?' . http_build_query([
+                                    'fecha' => (string) ($reserva['fecha'] ?? ''),
+                                    'id_laboratorio' => (int) ($reserva['id_laboratorio'] ?? 0)
+                                ]);
+
+                                ?>
+
+                                <div class="list-group-item px-4 py-3">
+
+                                    <div class="row align-items-center g-3">
+
+                                        <!-- Fecha -->
+                                        <div class="col-6 col-md-2">
+
+                                            <div class="text-primary fw-bold">
+                                                <i class="bi bi-calendar-event me-1"></i>
+                                                <?= htmlspecialchars(
+                                                    fechaDashboard((string) ($reserva['fecha'] ?? ''))
+                                                ) ?>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Horario -->
+                                        <div class="col-6 col-md-2">
+
+                                            <div class="fw-semibold">
+                                                <?= htmlspecialchars(
+                                                    (string) ($reserva['horario'] ?? 'Bloque')
+                                                ) ?>
+                                            </div>
+
+                                            <small class="text-muted">
+                                                <i class="bi bi-clock me-1"></i>
+                                                <?= htmlspecialchars(
+                                                    horaDashboard($reserva['hora_inicio'] ?? null)
+                                                ) ?>
+                                                -
+                                                <?= htmlspecialchars(
+                                                    horaDashboard($reserva['hora_fin'] ?? null)
+                                                ) ?>
+                                            </small>
+
+                                        </div>
+
+                                        <!-- Laboratorio / Curso -->
+                                        <div class="col-6 col-md-3">
+
+                                            <div class="fw-semibold">
+                                                <i class="bi bi-pc-display me-1"></i>
+                                                <?= htmlspecialchars(
+                                                    (string) ($reserva['laboratorio'] ?? '')
+                                                ) ?>
+                                            </div>
+
+                                            <small class="text-muted">
+                                                <i class="bi bi-mortarboard me-1"></i>
+                                                <?= htmlspecialchars(
+                                                    (string) ($reserva['curso'] ?? '')
+                                                ) ?>
+                                            </small>
+
+                                        </div>
+
+                                        <!-- Responsable -->
+                                        <div class="col-6 col-md-3">
+
+                                            <small class="text-muted d-block">Responsable</small>
+
+                                            <span>
+                                                <?= htmlspecialchars(trim(
+                                                    ($reserva['nombres'] ?? '') . ' ' . ($reserva['apellidos'] ?? '')
+                                                )) ?>
+                                            </span>
+
+                                        </div>
+
+                                        <!-- Estado / acción -->
+                                        <div class="col-12 col-md-2 text-md-end">
+
+                                            <span class="badge <?= $badgeEstado ?> mb-2">
+                                                <?= htmlspecialchars((string) ($reserva['estado'] ?? '')) ?>
+                                            </span>
+
+                                            <div>
+                                                <a
+                                                    href="<?= htmlspecialchars($urlAgenda) ?>"
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    title="Ver en agenda">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            <?php endforeach; ?>
+
+                        </div>
+
+                        <div class="p-3 border-top text-end">
+
+                            <a href="/reservas/calendario" class="btn btn-sm btn-outline-primary">
+                                Ver calendario
+                                <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+
+                        </div>
+
+                    <?php endif; ?>
+
+                </div>
+
+            </div>
+
         </div>
 
 
@@ -274,7 +453,7 @@ function horaDashboard(?string $hora): string
                         <?= htmlspecialchars($mesAgenda->format('Y')) ?>
                     </div>
 
-                    <div class="agenda-mes mb-4">
+                    <div class="agenda-mes">
 
                         <?php foreach (['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'] as $diaSemana): ?>
 
@@ -321,119 +500,6 @@ function horaDashboard(?string $hora): string
                         ?>
 
                     </div>
-
-
-                    <div class="fw-semibold mb-2">
-                        Próximas reservas
-                    </div>
-
-                    <?php if (empty($proximasReservas)): ?>
-
-                        <div class="text-muted small py-3">
-                            <i class="bi bi-calendar-x me-1"></i>
-                            No hay reservas programadas.
-                        </div>
-
-                        <a href="/reservas" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-calendar-plus me-1"></i>
-                            Crear reserva
-                        </a>
-
-                    <?php else: ?>
-
-                        <?php foreach ($proximasReservas as $reserva): ?>
-
-                            <?php
-
-                            $estado = mb_strtolower((string) ($reserva['estado'] ?? ''));
-
-                            $badgeEstado = match ($estado) {
-                                'pendiente'  => 'bg-warning text-dark',
-                                'confirmada' => 'bg-success',
-                                'finalizada' => 'bg-secondary',
-                                'cancelada'  => 'bg-danger',
-                                default      => 'bg-secondary'
-                            };
-
-                            $urlAgenda = '/reservas?' . http_build_query([
-                                'fecha' => (string) ($reserva['fecha'] ?? ''),
-                                'id_laboratorio' => (int) ($reserva['id_laboratorio'] ?? 0)
-                            ]);
-
-                            ?>
-
-                            <div class="agenda-item">
-
-                                <div class="d-flex justify-content-between align-items-start gap-2">
-
-                                    <div>
-
-                                        <div class="agenda-fecha">
-                                            <?= htmlspecialchars(
-                                                fechaDashboard((string) ($reserva['fecha'] ?? ''))
-                                            ) ?>
-                                        </div>
-
-                                        <div class="small">
-                                            <i class="bi bi-clock me-1"></i>
-                                            <?= htmlspecialchars(
-                                                horaDashboard($reserva['hora_inicio'] ?? null)
-                                            ) ?>
-                                            -
-                                            <?= htmlspecialchars(
-                                                horaDashboard($reserva['hora_fin'] ?? null)
-                                            ) ?>
-                                            <span class="mx-1">·</span>
-                                            <?= htmlspecialchars((string) ($reserva['curso'] ?? '')) ?>
-                                        </div>
-
-                                        <div class="small text-muted">
-                                            <i class="bi bi-pc-display me-1"></i>
-                                            <?= htmlspecialchars((string) ($reserva['laboratorio'] ?? '')) ?>
-                                        </div>
-
-                                        <div class="small text-muted">
-                                            <i class="bi bi-person me-1"></i>
-                                            <?= htmlspecialchars(trim(
-                                                ($reserva['nombres'] ?? '') . ' ' . ($reserva['apellidos'] ?? '')
-                                            )) ?>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="text-end text-nowrap">
-
-                                        <span class="badge <?= $badgeEstado ?> mb-2">
-                                            <?= htmlspecialchars((string) ($reserva['estado'] ?? '')) ?>
-                                        </span>
-
-                                        <div>
-                                            <a
-                                                href="<?= htmlspecialchars($urlAgenda) ?>"
-                                                class="btn btn-sm btn-outline-primary"
-                                                title="Ver en agenda">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        <?php endforeach; ?>
-
-                        <div class="text-end mt-3">
-
-                            <a href="/reservas/calendario" class="btn btn-sm btn-outline-primary">
-                                Ver calendario
-                                <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
-
-                        </div>
-
-                    <?php endif; ?>
 
                 </div>
 
