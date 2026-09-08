@@ -4,38 +4,74 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Services\AgendaReservaService;
 use App\Services\ObservacionService;
 use App\Services\ReservaService;
 use Core\Controller;
 use Core\Request;
 use Core\Response;
 use Core\Session;
+use DateTimeImmutable;
 
 final class ObservacionController extends Controller
 {
     private ObservacionService $service;
     private ReservaService $reservaService;
+    private AgendaReservaService $agendaService;
     private Response $response;
 
     public function __construct()
     {
         $this->service = new ObservacionService();
         $this->reservaService = new ReservaService();
+        $this->agendaService = new AgendaReservaService();
         $this->response = new Response();
     }
 
     /**
-     * Listado global de observaciones registradas.
+     * Listado global de observaciones registradas, junto con las
+     * reservas de un día concreto (hoy por defecto) para poder
+     * registrar una observación nueva sin salir de la pantalla.
      */
-    public function index(): string
+    public function index(Request $request): string
     {
+        date_default_timezone_set('America/Santiago');
+
+        $fecha = $this->normalizarFecha(
+            (string) $request->input('fecha', '')
+        );
+
         return $this->view(
             'observaciones.index',
             [
                 'title' => 'Observaciones',
                 'observaciones' => $this->service->listar(),
+                'fechaReservas' => $fecha,
+                'reservasDelDia' => $this->agendaService->obtenerReservas($fecha),
+                'abrirSelector' => $request->has('fecha'),
             ]
         );
+    }
+
+    /**
+     * Devuelve la fecha recibida si es un Y-m-d válido; si no,
+     * el día de hoy.
+     */
+    private function normalizarFecha(string $fecha): string
+    {
+        $fecha = trim($fecha);
+
+        if ($fecha === '') {
+            return date('Y-m-d');
+        }
+
+        $fechaObjeto = DateTimeImmutable::createFromFormat('!Y-m-d', $fecha);
+
+        if ($fechaObjeto === false || $fechaObjeto->format('Y-m-d') !== $fecha) {
+            return date('Y-m-d');
+        }
+
+        return $fecha;
     }
 
     /**
