@@ -40,13 +40,13 @@
 /* Círculo sólido con el icono en blanco: antes era un verde al 12%
    de opacidad sobre blanco y se veía muy lavado. */
 .stat-icon {
-    width: 65px;
-    height: 65px;
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     background: linear-gradient(135deg, #1B6B3B, #2E8B57);
     color: #fff;
     box-shadow: 0 6px 16px rgba(27,107,59,.28);
@@ -172,7 +172,7 @@
    ========================================== */
 
 .stat-number {
-    font-size: 1.7rem;
+    font-size: 1.45rem;
 }
 
 .stat-label {
@@ -236,10 +236,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
-    min-height: 132px;
-    padding: 18px;
-    border-radius: 18px;
+    gap: 8px;
+    min-height: 106px;
+    padding: 14px;
+    border-radius: 16px;
     text-decoration: none;
     color: inherit;
     transition: transform .2s ease, box-shadow .2s ease;
@@ -257,29 +257,29 @@
 }
 
 .mosaico-icono {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
+    font-size: 1.05rem;
     background: rgba(255, 255, 255, .65);
 }
 
 .mosaico-titulo {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: .88rem;
     line-height: 1.2;
 }
 
 .mosaico-detalle {
-    font-size: .82rem;
+    font-size: .74rem;
     opacity: .8;
 }
 
 .mosaico-numero {
-    font-size: 1.9rem;
+    font-size: 1.45rem;
     font-weight: 700;
     line-height: 1;
 }
@@ -319,7 +319,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: .8rem;
+    font-size: .74rem;
     border-radius: 50%;
     color: #495057;
 }
@@ -350,7 +350,7 @@
 }
 
 .agenda-item {
-    padding: 12px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #edf0f2;
 }
 
@@ -361,7 +361,13 @@
 .agenda-fecha {
     font-weight: 700;
     color: #1B6B3B;
-    font-size: .9rem;
+    font-size: .82rem;
+}
+
+/* El detalle de cada reserva de la agenda es información de apoyo:
+   se deja algo más chica que el texto normal. */
+.agenda-item .small {
+    font-size: .76rem;
 }
 
 @media (max-width: 991px) {
