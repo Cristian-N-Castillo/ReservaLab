@@ -82,6 +82,7 @@ final class AgendaReservaRepository extends Repository
 
                 r.id_reserva,
                 r.id_usuario,
+                r.id_laboratorio,
 
                 l.nombre AS laboratorio,
 

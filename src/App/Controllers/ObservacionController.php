@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Services\AgendaReservaService;
+use App\Services\LaboratorioService;
 use App\Services\ObservacionService;
 use App\Services\ReservaService;
 use Core\Controller;
@@ -18,6 +19,7 @@ final class ObservacionController extends Controller
     private ObservacionService $service;
     private ReservaService $reservaService;
     private AgendaReservaService $agendaService;
+    private LaboratorioService $laboratorioService;
     private Response $response;
 
     public function __construct()
@@ -25,6 +27,7 @@ final class ObservacionController extends Controller
         $this->service = new ObservacionService();
         $this->reservaService = new ReservaService();
         $this->agendaService = new AgendaReservaService();
+        $this->laboratorioService = new LaboratorioService();
         $this->response = new Response();
     }
 
@@ -41,14 +44,34 @@ final class ObservacionController extends Controller
             (string) $request->input('fecha', '')
         );
 
+        $reservasDelDia = $this->agendaService->obtenerReservas($fecha);
+
+        /*
+         * Filtro opcional por laboratorio: un día completo con todos
+         * los laboratorios deja el selector muy cargado. 0 = todos.
+         */
+        $idLaboratorio = (int) $request->input('id_laboratorio', 0);
+
+        if ($idLaboratorio > 0) {
+
+            $reservasDelDia = array_values(array_filter(
+                $reservasDelDia,
+                static fn (array $r): bool =>
+                    (int) $r['id_laboratorio'] === $idLaboratorio
+            ));
+        }
+
         return $this->view(
             'observaciones.index',
             [
                 'title' => 'Observaciones',
                 'observaciones' => $this->service->listar(),
                 'fechaReservas' => $fecha,
-                'reservasDelDia' => $this->agendaService->obtenerReservas($fecha),
-                'abrirSelector' => $request->has('fecha'),
+                'reservasDelDia' => $reservasDelDia,
+                'laboratorios' => $this->laboratorioService->listar(),
+                'idLaboratorioSeleccionado' => $idLaboratorio,
+                'abrirSelector' => $request->has('fecha')
+                    || $request->has('id_laboratorio'),
             ]
         );
     }

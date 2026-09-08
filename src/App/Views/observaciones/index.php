@@ -6,12 +6,16 @@ declare(strict_types=1);
 /** @var array $reservasDelDia */
 /** @var string $fechaReservas */
 /** @var bool $abrirSelector */
+/** @var array $laboratorios */
+/** @var int $idLaboratorioSeleccionado */
 
 $title = $title ?? 'Observaciones';
 
 $reservasDelDia = $reservasDelDia ?? [];
 $fechaReservas = $fechaReservas ?? date('Y-m-d');
 $abrirSelector = $abrirSelector ?? false;
+$laboratorios = $laboratorios ?? [];
+$idLaboratorioSeleccionado = (int) ($idLaboratorioSeleccionado ?? 0);
 
 function horaObservaciones(?string $hora): string
 {
@@ -199,8 +203,8 @@ function horaObservaciones(?string $hora): string
                     Elija la reserva sobre la que desea registrar la observación.
                 </p>
 
-                <!-- Cambiar de día recarga la pantalla con las reservas
-                     de esa fecha y vuelve a abrir este selector. -->
+                <!-- Cambiar el día o el laboratorio recarga la pantalla
+                     con esas reservas y vuelve a abrir este selector. -->
                 <form method="GET" action="/observaciones" class="row g-2 align-items-end mb-4">
 
                     <div class="col-12 col-sm-auto">
@@ -216,6 +220,40 @@ function horaObservaciones(?string $hora): string
                             class="form-control"
                             value="<?= htmlspecialchars($fechaReservas) ?>"
                             onchange="this.form.submit()">
+
+                    </div>
+
+                    <div class="col-12 col-sm">
+
+                        <label for="laboratorioReservas" class="form-label fw-semibold mb-1">
+                            Laboratorio
+                        </label>
+
+                        <select
+                            name="id_laboratorio"
+                            id="laboratorioReservas"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                            <option value="0">
+                                Todos los laboratorios
+                            </option>
+
+                            <?php foreach ($laboratorios as $laboratorio): ?>
+
+                                <?php $idLab = (int) $laboratorio->id_laboratorio; ?>
+
+                                <option
+                                    value="<?= $idLab ?>"
+                                    <?= $idLab === $idLaboratorioSeleccionado ? 'selected' : '' ?>>
+
+                                    <?= htmlspecialchars($laboratorio->nombre) ?>
+
+                                </option>
+
+                            <?php endforeach; ?>
+
+                        </select>
 
                     </div>
 
@@ -237,7 +275,23 @@ function horaObservaciones(?string $hora): string
                         <i class="bi bi-calendar-x me-2"></i>
 
                         No existen reservas para el
-                        <?= htmlspecialchars(date('d/m/Y', strtotime($fechaReservas))) ?>.
+                        <?= htmlspecialchars(date('d/m/Y', strtotime($fechaReservas))) ?><?php
+
+                        // Si hay un laboratorio filtrado se aclara, para que no
+                        // parezca que el día está libre por completo.
+                        if ($idLaboratorioSeleccionado > 0):
+
+                            foreach ($laboratorios as $laboratorio):
+
+                                if ((int) $laboratorio->id_laboratorio === $idLaboratorioSeleccionado): ?>
+                                    en <?= htmlspecialchars($laboratorio->nombre) ?><?php
+                                endif;
+
+                            endforeach;
+
+                        endif;
+
+                        ?>.
 
                     </div>
 
