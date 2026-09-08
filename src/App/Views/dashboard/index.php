@@ -11,7 +11,6 @@ use Core\Session;
  * @var int $totalCursos
  * @var int $totalHorarios
  * @var array $proximasReservas
- * @var array $laboratoriosDashboard
  * @var \DateTimeImmutable $mesAgenda
  * @var array $diasConReservas
  */
@@ -21,7 +20,6 @@ $nombre = Session::get('nombre', 'Administrador');
 date_default_timezone_set('America/Santiago');
 
 $proximasReservas = $proximasReservas ?? [];
-$laboratoriosDashboard = $laboratoriosDashboard ?? [];
 $diasConReservas = $diasConReservas ?? [];
 $mesAgenda = $mesAgenda ?? new DateTimeImmutable('first day of this month');
 
@@ -232,160 +230,6 @@ function horaDashboard(?string $hora): string
                     </div>
 
                 </a>
-
-            </div>
-
-
-            <!-- Estado de los laboratorios -->
-
-            <div class="row g-4">
-
-                <?php if (empty($laboratoriosDashboard)): ?>
-
-                    <div class="col-12">
-
-                        <div class="card dashboard-card">
-
-                            <div class="card-body">
-
-                                <div class="alert alert-secondary mb-0">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    No existen laboratorios activos.
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                <?php else: ?>
-
-                    <?php foreach ($laboratoriosDashboard as $item): ?>
-
-                        <?php
-
-                        $laboratorio = $item['laboratorio'];
-                        $proximaReserva = $item['proxima_reserva'] ?? null;
-
-                        $fechaAgenda = $proximaReserva
-                            ? (string) $proximaReserva['fecha']
-                            : date('Y-m-d');
-
-                        $urlAgendaLaboratorio = '/reservas?' . http_build_query([
-                            'fecha' => $fechaAgenda,
-                            'id_laboratorio' => (int) $laboratorio->id_laboratorio
-                        ]);
-
-                        ?>
-
-                        <div class="col-12 col-md-6">
-
-                            <div class="card dashboard-card h-100">
-
-                                <div class="card-body">
-
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-
-                                        <div>
-
-                                            <h5 class="fw-bold mb-1">
-                                                <i class="bi bi-pc-display me-2"></i>
-                                                <?= htmlspecialchars($laboratorio->nombre) ?>
-                                            </h5>
-
-                                            <div class="text-muted">
-                                                <i class="bi bi-geo-alt me-1"></i>
-                                                <?= htmlspecialchars($laboratorio->ubicacion) ?>
-                                            </div>
-
-                                        </div>
-
-                                        <span class="badge bg-success">Activo</span>
-
-                                    </div>
-
-                                    <div class="row g-3 mb-3">
-
-                                        <div class="col-6">
-
-                                            <div class="border rounded p-3 h-100">
-
-                                                <small class="text-muted d-block mb-1">
-                                                    Capacidad
-                                                </small>
-
-                                                <strong>
-                                                    <i class="bi bi-people me-1"></i>
-                                                    <?= (int) $laboratorio->capacidad ?>
-                                                    computadores
-                                                </strong>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-6">
-
-                                            <div class="border rounded p-3 h-100">
-
-                                                <small class="text-muted d-block mb-1">
-                                                    Próxima reserva
-                                                </small>
-
-                                                <?php if ($proximaReserva): ?>
-
-                                                    <strong class="d-block">
-                                                        <?= htmlspecialchars(
-                                                            fechaDashboard((string) $proximaReserva['fecha'])
-                                                        ) ?>
-                                                    </strong>
-
-                                                    <small class="text-muted">
-                                                        <?= htmlspecialchars(
-                                                            horaDashboard($proximaReserva['hora_inicio'] ?? null)
-                                                        ) ?>
-                                                        -
-                                                        <?= htmlspecialchars(
-                                                            horaDashboard($proximaReserva['hora_fin'] ?? null)
-                                                        ) ?>
-                                                    </small>
-
-                                                <?php else: ?>
-
-                                                    <span class="text-success">
-                                                        <i class="bi bi-check-circle me-1"></i>
-                                                        Sin reservas próximas
-                                                    </span>
-
-                                                <?php endif; ?>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="d-grid">
-
-                                        <a
-                                            href="<?= htmlspecialchars($urlAgendaLaboratorio) ?>"
-                                            class="btn btn-outline-primary">
-                                            <i class="bi bi-calendar-week me-1"></i>
-                                            Ver agenda
-                                        </a>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    <?php endforeach; ?>
-
-                <?php endif; ?>
 
             </div>
 

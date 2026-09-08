@@ -97,10 +97,6 @@ final class DashboardController extends Controller
                     $this->dashboardService
                         ->proximasReservas(6),
 
-                'laboratoriosDashboard' =>
-                    $this->dashboardService
-                        ->laboratorios(),
-
                 'mesAgenda' => $primerDiaMes,
                 'diasConReservas' => $diasConReservas,
             ]
