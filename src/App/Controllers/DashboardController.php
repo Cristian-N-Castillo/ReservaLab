@@ -93,9 +93,14 @@ final class DashboardController extends Controller
                 'totalHorarios' =>
                     count($this->horarioService->listar()),
 
+                /*
+                 * Se traen más de las que caben en una página: la vista
+                 * las pagina de a 3, así el listado no se alarga pero
+                 * igual se puede avanzar a las siguientes.
+                 */
                 'proximasReservas' =>
                     $this->dashboardService
-                        ->proximasReservas(6),
+                        ->proximasReservas(12),
 
                 'mesAgenda' => $primerDiaMes,
                 'diasConReservas' => $diasConReservas,
