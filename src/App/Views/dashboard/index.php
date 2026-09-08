@@ -12,7 +12,8 @@ use Core\Session;
  * @var int $totalHorarios
  * @var array $proximasReservas
  * @var \DateTimeImmutable $mesAgenda
- * @var array $diasConReservas
+ * @var array $reservasPorDiaAgenda
+ * @var int $cuposPorDia
  */
 
 $nombre = Session::get('nombre', 'Administrador');
@@ -20,7 +21,34 @@ $nombre = Session::get('nombre', 'Administrador');
 date_default_timezone_set('America/Santiago');
 
 $proximasReservas = $proximasReservas ?? [];
-$diasConReservas = $diasConReservas ?? [];
+$reservasPorDiaAgenda = $reservasPorDiaAgenda ?? [];
+$cuposPorDia = max(1, (int) ($cuposPorDia ?? 1));
+
+/**
+ * Nivel de ocupación de un día, para pintarlo en el mini calendario.
+ *
+ * Se mide contra los cupos totales del día (laboratorios × bloques):
+ * hasta un tercio es holgado, hasta dos tercios es medio, y de ahí
+ * en adelante queda poco disponible.
+ */
+function nivelOcupacionAgenda(int $reservas, int $cupos): string
+{
+    if ($reservas <= 0) {
+        return '';
+    }
+
+    $porcentaje = $reservas / $cupos;
+
+    if ($porcentaje < 0.34) {
+        return 'baja';
+    }
+
+    if ($porcentaje < 0.67) {
+        return 'media';
+    }
+
+    return 'alta';
+}
 $mesAgenda = $mesAgenda ?? new DateTimeImmutable('first day of this month');
 
 $dias = [
@@ -276,7 +304,7 @@ function horaDashboard(?string $hora): string
 
                     <div class="agenda-mes">
 
-                        <?php foreach (['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'] as $diaSemana): ?>
+                        <?php foreach (['Lu', 'Ma', 'Mi', 'Ju', 'Vi'] as $diaSemana): ?>
 
                             <div class="agenda-cabecera">
                                 <?= htmlspecialchars($diaSemana) ?>
@@ -290,7 +318,17 @@ function horaDashboard(?string $hora): string
 
                         while ($cursor <= $finGrilla):
 
+                            // No se reserva fin de semana: esos días no se pintan.
+                            if ((int) $cursor->format('N') > 5) {
+                                $cursor = $cursor->modify('+1 day');
+                                continue;
+                            }
+
                             $fechaTexto = $cursor->format('Y-m-d');
+
+                            $reservasDelDia = (int) ($reservasPorDiaAgenda[$fechaTexto] ?? 0);
+
+                            $nivel = nivelOcupacionAgenda($reservasDelDia, $cuposPorDia);
 
                             $clases = ['agenda-dia'];
 
@@ -298,18 +336,31 @@ function horaDashboard(?string $hora): string
                                 $clases[] = 'agenda-dia-fuera';
                             }
 
-                            if (isset($diasConReservas[$fechaTexto])) {
-                                $clases[] = 'agenda-dia-con-reservas';
+                            if ($nivel !== '') {
+                                $clases[] = 'agenda-dia-ocupacion';
+                                $clases[] = 'agenda-ocupacion-' . $nivel;
                             }
 
                             if ($fechaTexto === $hoy) {
                                 $clases[] = 'agenda-dia-hoy';
                             }
 
+                            $titulo = $reservasDelDia === 0
+                                ? 'Sin reservas'
+                                : $reservasDelDia . ' de ' . $cuposPorDia . ' bloques reservados';
+
                             ?>
 
-                            <div class="<?= implode(' ', $clases) ?>">
-                                <?= (int) $cursor->format('j') ?>
+                            <div
+                                class="<?= implode(' ', $clases) ?>"
+                                title="<?= htmlspecialchars(
+                                    date('d/m/Y', strtotime($fechaTexto)) . ' — ' . $titulo
+                                ) ?>">
+
+                                <span class="agenda-numero">
+                                    <?= (int) $cursor->format('j') ?>
+                                </span>
+
                             </div>
 
                             <?php
@@ -319,6 +370,26 @@ function horaDashboard(?string $hora): string
                         endwhile;
 
                         ?>
+
+                    </div>
+
+                    <!-- Qué significa el color del punto bajo cada día -->
+                    <div class="agenda-leyenda mt-3">
+
+                        <span>
+                            <span class="agenda-punto agenda-ocupacion-baja"></span>
+                            Holgado
+                        </span>
+
+                        <span>
+                            <span class="agenda-punto agenda-ocupacion-media"></span>
+                            Medio
+                        </span>
+
+                        <span>
+                            <span class="agenda-punto agenda-ocupacion-alta"></span>
+                            Casi lleno
+                        </span>
 
                     </div>
 

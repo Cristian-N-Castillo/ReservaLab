@@ -55,10 +55,11 @@ final class DashboardController extends Controller
         $ultimoDiaMes = new DateTimeImmutable('last day of this month');
 
         /*
-         * Para el mini calendario de la agenda basta con saber qué
-         * días del mes tienen reservas vigentes, no el detalle.
+         * Para el mini calendario de la agenda interesa cuántas
+         * reservas vigentes tiene cada día, no el detalle: con eso
+         * se pinta qué tan ocupado está.
          */
-        $diasConReservas = [];
+        $reservasPorDiaAgenda = [];
 
         foreach (
             $this->reservaService->porRangoFechas(
@@ -66,8 +67,14 @@ final class DashboardController extends Controller
                 $ultimoDiaMes->format('Y-m-d')
             ) as $reserva
         ) {
-            $diasConReservas[(string) $reserva['fecha']] = true;
+            $fecha = (string) $reserva['fecha'];
+
+            $reservasPorDiaAgenda[$fecha] =
+                ($reservasPorDiaAgenda[$fecha] ?? 0) + 1;
         }
+
+        $totalLaboratorios = $this->dashboardService->totalLaboratorios();
+        $totalHorarios = count($this->horarioService->listar());
 
         return $this->view(
             'dashboard.index',
@@ -82,16 +89,13 @@ final class DashboardController extends Controller
                     $this->cursoService
                         ->total(),
 
-                'totalLaboratorios' =>
-                    $this->dashboardService
-                        ->totalLaboratorios(),
+                'totalLaboratorios' => $totalLaboratorios,
 
                 'totalReservas' =>
                     $this->dashboardService
                         ->totalReservasHoy(),
 
-                'totalHorarios' =>
-                    count($this->horarioService->listar()),
+                'totalHorarios' => $totalHorarios,
 
                 /*
                  * Se traen más de las que caben en una página: la vista
@@ -103,7 +107,14 @@ final class DashboardController extends Controller
                         ->proximasReservas(12),
 
                 'mesAgenda' => $primerDiaMes,
-                'diasConReservas' => $diasConReservas,
+                'reservasPorDiaAgenda' => $reservasPorDiaAgenda,
+
+                /*
+                 * Cupos que tiene un día completo: cada laboratorio
+                 * puede reservarse en cada bloque horario. Es el
+                 * 100% contra el que se mide la ocupación.
+                 */
+                'cuposPorDia' => $totalLaboratorios * $totalHorarios,
             ]
         );
     }

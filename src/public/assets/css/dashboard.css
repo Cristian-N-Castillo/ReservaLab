@@ -298,9 +298,10 @@
    Agenda lateral
    ========================================== */
 
+/* Solo días hábiles: no se reserva sábado ni domingo. */
 .agenda-mes {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 2px;
     text-align: center;
 }
@@ -313,41 +314,83 @@
     padding-bottom: 6px;
 }
 
+/* La celda ocupa el ancho de la columna, pero el círculo del día es
+   de tamaño fijo: si no, al tener solo 5 columnas el marcador de
+   "hoy" se convierte en un círculo enorme. */
 .agenda-dia {
     position: relative;
-    aspect-ratio: 1;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: .74rem;
-    border-radius: 50%;
     color: #495057;
+}
+
+.agenda-numero {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .agenda-dia-fuera {
     color: #ced4da;
 }
 
-/* Punto bajo el número: ese día tiene reservas */
-.agenda-dia-con-reservas::after {
+/* Punto bajo el número: indica qué tan ocupado está ese día
+   (holgado / medio / casi lleno). */
+.agenda-dia-ocupacion::after {
     content: "";
     position: absolute;
     bottom: 3px;
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: #1B6B3B;
 }
 
-.agenda-dia-hoy {
+.agenda-dia.agenda-ocupacion-baja::after   { background: #198754; }
+.agenda-dia.agenda-ocupacion-media::after  { background: #f0ad00; }
+.agenda-dia.agenda-ocupacion-alta::after   { background: #dc3545; }
+
+.agenda-dia-hoy .agenda-numero {
     background: #1B6B3B;
     color: #fff;
     font-weight: 700;
 }
 
-.agenda-dia-hoy.agenda-dia-con-reservas::after {
-    background: #fff;
+/* Sobre el círculo verde de "hoy" los colores del punto no se
+   distinguen, así que se pinta blanco. */
+.agenda-dia-hoy.agenda-dia-ocupacion::after {
+    background: #fff !important;
 }
+
+.agenda-leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: .72rem;
+    color: #6c757d;
+}
+
+.agenda-leyenda > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.agenda-punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.agenda-punto.agenda-ocupacion-baja  { background: #198754; }
+.agenda-punto.agenda-ocupacion-media { background: #f0ad00; }
+.agenda-punto.agenda-ocupacion-alta  { background: #dc3545; }
 
 .agenda-item {
     padding: 10px 0;
