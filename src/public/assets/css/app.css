@@ -61,6 +61,16 @@ body {
     padding: 20px;
 }
 
+/* El menú es siempre desplegable, también en escritorio: como panel
+   flotante no necesita el borde ni el alto de una columna fija, y le
+   basta un ancho menor que el que trae Bootstrap por defecto. */
+.sidebar.offcanvas {
+    width: 285px;
+    min-height: 0;
+    padding: 0;
+    border-right: none;
+}
+
 .sidebar-title {
     color: #6c757d;
     font-size: .75rem;

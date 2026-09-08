@@ -6,11 +6,13 @@ namespace App\Controllers;
 
 use App\Services\CursoService;
 use App\Services\DashboardService;
+use App\Services\HorarioService;
 use App\Services\ReservaService;
 use App\Services\UsuarioService;
 use Core\Controller;
 use Core\Request;
 use Core\Session;
+use DateTimeImmutable;
 
 final class DashboardController extends Controller
 {
@@ -18,6 +20,7 @@ final class DashboardController extends Controller
     private CursoService $cursoService;
     private DashboardService $dashboardService;
     private ReservaService $reservaService;
+    private HorarioService $horarioService;
 
     public function __construct()
     {
@@ -28,6 +31,8 @@ final class DashboardController extends Controller
         $this->dashboardService = new DashboardService();
 
         $this->reservaService = new ReservaService();
+
+        $this->horarioService = new HorarioService();
     }
 
     /**
@@ -42,6 +47,26 @@ final class DashboardController extends Controller
 
         if (!$esAdmin) {
             return $this->indexDocente();
+        }
+
+        date_default_timezone_set('America/Santiago');
+
+        $primerDiaMes = new DateTimeImmutable('first day of this month');
+        $ultimoDiaMes = new DateTimeImmutable('last day of this month');
+
+        /*
+         * Para el mini calendario de la agenda basta con saber qué
+         * días del mes tienen reservas vigentes, no el detalle.
+         */
+        $diasConReservas = [];
+
+        foreach (
+            $this->reservaService->porRangoFechas(
+                $primerDiaMes->format('Y-m-d'),
+                $ultimoDiaMes->format('Y-m-d')
+            ) as $reserva
+        ) {
+            $diasConReservas[(string) $reserva['fecha']] = true;
         }
 
         return $this->view(
@@ -65,13 +90,19 @@ final class DashboardController extends Controller
                     $this->dashboardService
                         ->totalReservasHoy(),
 
+                'totalHorarios' =>
+                    count($this->horarioService->listar()),
+
                 'proximasReservas' =>
                     $this->dashboardService
-                        ->proximasReservas(5),
+                        ->proximasReservas(6),
 
                 'laboratoriosDashboard' =>
                     $this->dashboardService
                         ->laboratorios(),
+
+                'mesAgenda' => $primerDiaMes,
+                'diasConReservas' => $diasConReservas,
             ]
         );
     }

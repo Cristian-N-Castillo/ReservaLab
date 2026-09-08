@@ -18,7 +18,7 @@ $avatar = (string) Session::get('avatar', '');
         <div class="d-flex align-items-center">
 
             <button
-                class="btn btn-primary border-0 shadow-none d-lg-none me-2 px-2"
+                class="btn btn-primary border-0 shadow-none me-2 px-2"
                 type="button"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#sidebarOffcanvas"
@@ -29,7 +29,7 @@ $avatar = (string) Session::get('avatar', '');
 
             </button>
 
-            <a class="navbar-brand fw-bold d-none d-lg-flex align-items-center mb-0" href="/dashboard">
+            <a class="navbar-brand fw-bold d-flex align-items-center mb-0" href="/dashboard">
 
                 <img
                     src="<?= \Core\Asset::url('/assets/img/logo-sna-huerton.png') ?>"

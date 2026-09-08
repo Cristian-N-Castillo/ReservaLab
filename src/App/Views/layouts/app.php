@@ -41,13 +41,15 @@ declare(strict_types=1);
 
     <div class="row g-0">
 
+        <!-- El menú es siempre desplegable (hamburguesa), también en
+             escritorio: así el contenido usa todo el ancho. -->
         <aside
-            class="offcanvas-lg offcanvas-start col-lg-2 sidebar"
+            class="offcanvas offcanvas-start sidebar"
             tabindex="-1"
             id="sidebarOffcanvas"
             aria-labelledby="sidebarOffcanvasLabel">
 
-            <div class="offcanvas-header d-lg-none border-bottom">
+            <div class="offcanvas-header border-bottom">
 
                 <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="sidebarOffcanvasLabel">
 
@@ -78,7 +80,7 @@ declare(strict_types=1);
 
         </aside>
 
-        <main class="col-12 col-lg-10 content">
+        <main class="col-12 content">
 
             <?php require dirname(__DIR__) . '/partials/flash.php'; ?>
 
